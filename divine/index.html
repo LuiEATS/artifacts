@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Velvet Oracle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Barlow+Condensed:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0d0518;--gold:#c9a84c;--gold-light:#e8c96d;--gold-dim:#7a6228;--ivory:#f5ead8;--ivory-dim:#c4b89a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--deep);min-height:100vh;font-family:'Cormorant Garamond',serif;color:var(--ivory);overflow-x:hidden;}
+.table{min-height:100vh;background:radial-gradient(ellipse 80% 60% at 50% 40%,#2a1245 0%,#160828 40%,#0d0518 100%);position:relative;}
+.table::after{content:'';position:fixed;inset:12px;border:1px solid var(--gold-dim);pointer-events:none;z-index:999;box-shadow:inset 0 0 60px rgba(201,168,76,0.05);}
+.stars{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--dur) ease-in-out infinite var(--delay);}
+@keyframes twinkle{0%,100%{opacity:var(--op);}50%{opacity:calc(var(--op)*4);}}
+.table>*:not(.stars){position:relative;z-index:2;}
+/* HEADER */
+.header{text-align:center;padding:50px 20px 20px;}
+.header-ornament{color:var(--gold);font-size:13px;letter-spacing:8px;text-transform:uppercase;margin-bottom:10px;opacity:0.7;}
+h1{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,4.5vw,50px);color:var(--gold-light);letter-spacing:4px;line-height:1.2;text-shadow:0 0 40px rgba(201,168,76,0.4),0 2px 4px #000;}
+.subtitle{font-family:'IM Fell English',serif;font-style:italic;color:var(--ivory-dim);font-size:15px;margin-top:8px;letter-spacing:2px;}
+.divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px auto;max-width:480px;}
+.dl{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.dd{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+/* GRID */
+.row{display:flex;flex-direction:column;gap:26px;max-width:680px;margin:0 auto;padding:0 30px 26px;}
+.row1{}
+.row2{padding-bottom:70px;}
+@media(max-width:1100px){}
+@media(max-width:860px){}
+@media(max-width:560px){}
+/* PANEL */
+.panel{background:rgba(255,255,255,0.02);border:1px solid rgba(201,168,76,0.2);border-radius:2px;padding:26px 20px 22px;position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;animation:pglow 4s ease-in-out infinite;}
+.panel:nth-child(2){animation-delay:1s;}.panel:nth-child(3){animation-delay:2s;}.panel:nth-child(4){animation-delay:3s;}
+.panel::before{content:'';position:absolute;inset:4px;border:1px solid rgba(201,168,76,0.07);pointer-events:none;border-radius:1px;}
+@keyframes pglow{0%,100%{box-shadow:0 0 20px rgba(201,168,76,0.03);}50%{box-shadow:0 0 40px rgba(201,168,76,0.09);}}
+.c{position:absolute;width:14px;height:14px;border-color:var(--gold-dim);border-style:solid;opacity:0.55;}
+.c.tl{top:-1px;left:-1px;border-width:1px 0 0 1px;}.c.tr{top:-1px;right:-1px;border-width:1px 1px 0 0;}
+.c.bl{bottom:-1px;left:-1px;border-width:0 0 1px 1px;}.c.br{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+.pt{font-family:'Cinzel',serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);opacity:0.85;}
+.btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold-dim);padding:8px 18px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+.btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;z-index:-1;}
+.btn:hover{color:#0d0518;border-color:var(--gold);}.btn:hover::before{transform:scaleX(1);}.btn:active{transform:scale(0.97);}
+.cand{display:flex;justify-content:space-between;width:100%;padding:0 8px;margin-top:-2px;opacity:0.55;}
+.candle{display:flex;flex-direction:column;align-items:center;}
+.flame{width:6px;height:9px;background:radial-gradient(ellipse at 50% 80%,#ffd700,#ff8c00 60%,transparent);border-radius:50% 50% 30% 30%;animation:flk 1.5s ease-in-out infinite;filter:blur(0.5px);}
+@keyframes flk{0%,100%{transform:scale(1) skewX(0);opacity:1;}25%{transform:scale(.95,1.05) skewX(2deg);opacity:.9;}50%{transform:scale(1.05,.95) skewX(-2deg);opacity:1;}75%{transform:scale(.97) skewX(1deg);opacity:.95;}}
+.cbody{width:8px;height:22px;background:linear-gradient(180deg,#f5ead8,#d4c4a0);border-radius:1px;}
+.cbase{width:11px;height:3px;background:rgba(201,168,76,0.4);border-radius:1px;}
+/* 8 BALL */
+.eight-ball{width:200px;height:200px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 30%,#2a2a2a,#080808 60%);box-shadow:0 0 0 2px #1a1a1a,0 8px 32px rgba(0,0,0,0.9),inset 0 4px 12px rgba(255,255,255,0.07);position:relative;transition:transform 0.1s;}
+.eight-ball.shaking{animation:bshake 0.65s ease;}
+@keyframes bshake{0%,100%{transform:rotate(0);}15%{transform:rotate(-9deg) translateY(-5px);}30%{transform:rotate(9deg) translateY(-9px);}45%{transform:rotate(-6deg) translateY(-5px);}60%{transform:rotate(6deg) translateY(-2px);}75%{transform:rotate(-3deg);}90%{transform:rotate(2deg);}}
+.ball-shine{position:absolute;top:16%;left:20%;width:42%;height:32%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.13),transparent 70%);pointer-events:none;}
+.eight-label{position:absolute;top:14%;left:50%;transform:translateX(-50%);width:66px;height:66px;border-radius:50%;background:#ffffff;box-shadow:0 2px 10px rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-size:30px;font-weight:700;color:#111;line-height:1;transition:opacity 0.3s;}
+.eight-label.hidden{opacity:0;}
+.ball-window{position:absolute;bottom:14%;left:50%;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1a006e,#06003b 50%,#03001e);border:2px solid rgba(80,0,200,0.35);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.5s;box-shadow:0 0 20px rgba(60,0,200,0.5),inset 0 0 20px rgba(0,0,100,0.8);}
+.ball-window.vis{opacity:1;}
+.ball-ans{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:300;color:#a0c0ff;text-align:center;padding:8px;line-height:1.25;text-shadow:0 0 6px rgba(120,160,255,0.8);letter-spacing:1.5px;text-transform:uppercase;}
+.ball-res{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:300;letter-spacing:2px;text-transform:uppercase;text-align:center;min-height:22px;opacity:0;transition:opacity 0.5s;color:var(--ivory);}
+.ball-res.show{opacity:1;}
+/* TAROT */
+.deck-area{position:relative;width:140px;height:240px;cursor:pointer;user-select:none;}
+.deck-stack{position:absolute;inset:0;}
+.dc{position:absolute;width:140px;height:240px;border-radius:7px;background:linear-gradient(135deg,#1a0a3e,#2a1055);border:1px solid rgba(201,168,76,0.4);box-shadow:0 2px 6px rgba(0,0,0,0.6);}
+.dc::after{content:'';position:absolute;inset:6px;border:1px solid rgba(201,168,76,0.18);border-radius:4px;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(201,168,76,0.04) 6px,rgba(201,168,76,0.04) 7px),repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(201,168,76,0.04) 6px,rgba(201,168,76,0.04) 7px);}
+.dc:nth-child(1){transform:translate(-3px,-3px) rotate(-1.5deg);}.dc:nth-child(2){transform:translate(-1px,-1px) rotate(-.5deg);}.dc:nth-child(3){transform:none;}
+.dlabel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold);text-shadow:0 0 12px rgba(201,168,76,0.6);z-index:10;pointer-events:none;}
+.tc-reveal{position:absolute;inset:0;width:140px;height:240px;border-radius:7px;border:2px solid var(--gold);box-shadow:0 0 30px rgba(201,168,76,0.3),0 8px 32px rgba(0,0,0,0.8);overflow:hidden;opacity:0;transform:rotateY(90deg);transform-style:preserve-3d;transition:opacity 0.1s,transform 0.5s;pointer-events:none;background:#111;}
+.tc-reveal.show{opacity:1;transform:rotateY(0);pointer-events:all;}.tc-reveal.rev{transform:rotateY(0) rotate(180deg);}
+.tc-img{width:100%;height:100%;object-fit:cover;display:block;}
+.tc-info{text-align:center;min-height:60px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;opacity:0;transition:opacity 0.5s;}
+.tc-info.show{opacity:1;}
+.tc-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light);letter-spacing:2px;}
+.tc-orient{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ivory-dim);}
+.tc-mean{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--ivory);text-align:center;max-width:185px;line-height:1.5;}
+/* RUNES */
+.rune-bag{width:100px;height:100px;border-radius:50%;cursor:pointer;user-select:none;background:rgba(0,0,0,0.3);border:2px solid rgba(180,100,40,0.5);box-shadow:0 4px 20px rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;font-size:48px;transition:transform 0.2s;}
+.rune-bag:hover{transform:scale(1.05);}.rune-bag:active{transform:scale(0.95);}
+.rune-bag.shaking{animation:rsake 0.5s ease;}
+@keyframes rsake{0%,100%{transform:rotate(0);}20%{transform:rotate(-12deg) scale(1.05);}40%{transform:rotate(10deg) scale(1.05);}60%{transform:rotate(-8deg);}80%{transform:rotate(6deg);}}
+.rune-sym{font-size:52px;color:var(--gold-light);text-shadow:0 0 20px rgba(201,168,76,0.7);min-height:60px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.4s;}
+.rune-sym.show{opacity:1;}
+.rune-nm{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:3px;min-height:18px;opacity:0;transition:opacity 0.5s;text-align:center;}
+.rune-nm.show{opacity:1;}
+.rune-mn{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--ivory);text-align:center;max-width:195px;line-height:1.5;min-height:36px;opacity:0;transition:opacity 0.5s 0.15s;}
+.rune-mn.show{opacity:1;}
+/* I CHING */
+.coin-row{display:flex;gap:12px;align-items:center;justify-content:center;}
+.ic-coin{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe87a,#f0c030 45%,#c88a00 80%);border:2px solid #ffe066;box-shadow:0 0 14px rgba(255,220,60,0.7),0 3px 10px rgba(0,0,0,0.6),inset 0 1px 4px rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;font-size:34px;filter:drop-shadow(0 0 6px rgba(255,200,0,0.6));}
+.ic-coin.flip{animation:cflip 0.6s ease;}
+@keyframes cflip{0%,100%{transform:rotateY(0);}50%{transform:rotateY(180deg);}}
+.hex-disp{font-size:52px;line-height:1;min-height:58px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.5s;}
+.hex-disp.show{opacity:1;}
+.ic-name{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:2px;min-height:18px;opacity:0;transition:opacity 0.5s;text-align:center;}
+.ic-name.show{opacity:1;}
+.ic-mean{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--ivory);text-align:center;max-width:195px;line-height:1.5;min-height:36px;opacity:0;transition:opacity 0.5s 0.15s;}
+.ic-mean.show{opacity:1;}
+.lines-row{display:flex;gap:5px;justify-content:center;min-height:24px;}
+.lsym{font-size:18px;color:var(--gold);opacity:0;transition:opacity 0.3s;}
+.lsym.show{opacity:1;}
+/* ASTROLOGY */
+.inp-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);}
+.inp{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ivory);background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.25);padding:7px 11px;width:100%;text-align:center;outline:none;transition:border-color 0.3s;}
+.inp:focus{border-color:rgba(201,168,76,0.6);}.inp::placeholder{color:var(--ivory-dim);opacity:0.4;font-style:italic;}
+.astro-res{display:flex;flex-direction:column;gap:7px;align-items:center;opacity:0;transition:opacity 0.5s;width:100%;}
+.astro-res.show{opacity:1;}
+.asym{font-size:42px;line-height:1;}
+.aname{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light);letter-spacing:3px;}
+.adates{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ivory-dim);}
+.atraits{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--ivory);text-align:center;max-width:205px;line-height:1.5;}
+.a4grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;}
+.amini{background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.1);padding:7px;text-align:center;}
+.amini-l{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:3px;}
+.amini-v{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--ivory);}
+/* CHINESE ZODIAC */
+.cz-animal{font-size:54px;line-height:1;min-height:62px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.4s;}
+.cz-animal.show{opacity:1;}
+.cz-name{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light);letter-spacing:3px;opacity:0;transition:opacity 0.4s 0.1s;text-align:center;}
+.cz-name.show{opacity:1;}
+.cz-elem{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--ivory-dim);opacity:0;transition:opacity 0.4s 0.2s;}
+.cz-elem.show{opacity:1;}
+.cz-traits{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--ivory);text-align:center;max-width:195px;line-height:1.5;opacity:0;transition:opacity 0.4s 0.3s;}
+.cz-traits.show{opacity:1;}
+.cz-years{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:300;letter-spacing:1.5px;color:var(--gold-dim);opacity:0;transition:opacity 0.4s 0.4s;text-align:center;}
+.cz-years.show{opacity:1;}
+/* PENDULUM */
+.pend-scene{position:relative;width:180px;height:220px;cursor:pointer;user-select:none;margin:0 auto;}
+.pend-arm{position:absolute;top:8px;left:50%;transform-origin:top center;transform:translateX(-50%) rotate(0deg);display:flex;flex-direction:column;align-items:center;width:2px;}
+.pend-arm.idle{animation:pswing 2.6s cubic-bezier(0.37,0,0.63,1) infinite;}
+.pend-arm.going{animation:pswing-big 1.7s cubic-bezier(0.37,0,0.63,1) 4;}
+@keyframes pswing{0%{transform:translateX(-50%) rotate(-18deg);}50%{transform:translateX(-50%) rotate(18deg);}100%{transform:translateX(-50%) rotate(-18deg);}}
+@keyframes pswing-big{0%{transform:translateX(-50%) rotate(-40deg);}50%{transform:translateX(-50%) rotate(40deg);}100%{transform:translateX(-50%) rotate(-40deg);}}
+.pend-thread{width:1.5px;height:150px;background:linear-gradient(180deg,rgba(201,168,76,0.2),rgba(201,168,76,0.85) 70%,rgba(201,168,76,0.95));box-shadow:0 0 4px rgba(201,168,76,0.2);}
+.crystal-svg{width:30px;height:64px;filter:drop-shadow(0 0 14px rgba(160,220,255,0.95)) drop-shadow(0 0 30px rgba(100,180,255,0.5));}
+.pend-labels{position:absolute;bottom:4px;left:0;right:0;display:flex;justify-content:space-between;padding:0 14px;}
+.pend-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);transition:all 0.4s;}
+.pend-lbl.lit-yes{color:#6eff90;text-shadow:0 0 10px rgba(80,255,120,0.9);font-size:11px;}
+.pend-lbl.lit-no{color:#ff8080;text-shadow:0 0 10px rgba(255,80,80,0.9);font-size:11px;}
+.pend-ans{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:300;letter-spacing:6px;text-transform:uppercase;text-align:center;min-height:36px;opacity:0;transition:opacity 0.6s;}
+.pend-ans.show{opacity:1;}
+/* FOOTER */
+.footer{text-align:center;padding:0 20px 40px;font-family:'IM Fell English',serif;font-style:italic;color:var(--gold-dim);font-size:13px;letter-spacing:2px;}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="table">
+
+<header class="header">
+  <div class="header-ornament">✦ &nbsp; Seek Wisdom &nbsp; ✦</div>
+  <h1>The Velvet Oracle</h1>
+  <p class="subtitle">Instruments of the Unseen, gathered upon one table</p>
+  <div class="divider"><div class="dl"></div><div class="dd"></div><div class="dd" style="width:4px;height:4px;opacity:.5"></div><div class="dd"></div><div class="dl"></div></div>
+</header>
+
+<!-- ROW 1: 8Ball, Tarot, Runes -->
+<div class="row row1">
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">The Obsidian Oracle</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">
+      <div class="eight-ball" id="eball" onclick="consult8()">
+        <div class="ball-shine"></div>
+        <div class="eight-label" id="elabel">8</div>
+        <div class="ball-window" id="ewin"><div class="ball-ans" id="eans"></div></div>
+      </div>
+      <p style="font-family:'IM Fell English',serif;font-style:italic;color:var(--ivory-dim);font-size:13px;opacity:.7">Pose your question, then invert</p>
+      <div class="ball-res" id="eres"></div>
+      <button class="btn" onclick="consult8()">Consult the Oracle</button>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.2s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:.7s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">The Tarot Arcana</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">
+      <div class="deck-area" onclick="drawTarot()">
+        <div class="deck-stack"><div class="dc"></div><div class="dc"></div><div class="dc"></div></div>
+        <div class="dlabel">✦</div>
+        <div class="tc-reveal" id="tcrev"><img class="tc-img" id="tcimg" src="" alt="" /></div>
+      </div>
+      <div class="tc-info" id="tcinfo">
+        <div class="tc-name" id="tcname"></div>
+        <div class="tc-orient" id="tcor"></div>
+        <div class="tc-mean" id="tcmean"></div>
+      </div>
+      <button class="btn" onclick="drawTarot()">Draw a Card</button>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.4s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:1.1s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">Elder Futhark Runes</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
+      <div class="rune-bag" id="rbag" onclick="castRune()">🗿</div>
+      <div class="rune-sym" id="rsym"></div>
+      <div class="rune-nm" id="rnm"></div>
+      <div class="rune-mn" id="rmn"></div>
+      <button class="btn" onclick="castRune()">Cast a Rune</button>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.9s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:.3s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 2: I Ching, Astrology, Chinese Zodiac, Pendulum -->
+<div class="row row2">
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">I Ching</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:11px;width:100%">
+      <p style="font-family:'IM Fell English',serif;font-style:italic;color:var(--ivory-dim);font-size:12px;opacity:.7;text-align:center">Three coins cast, six times</p>
+      <div class="coin-row">
+        <div class="ic-coin" id="ic1">🀄</div>
+        <div class="ic-coin" id="ic2">🀄</div>
+        <div class="ic-coin" id="ic3">🀄</div>
+      </div>
+      <div class="lines-row" id="lrow"></div>
+      <div class="hex-disp" id="hexd"></div>
+      <div class="ic-name" id="icnm"></div>
+      <div class="ic-mean" id="icmn"></div>
+      <button class="btn" onclick="castIChing()">Cast the Hexagram</button>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.6s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:1.4s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">Western Astrology</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:11px;width:100%">
+      <div style="display:flex;flex-direction:column;gap:7px;width:100%;align-items:center">
+        <div class="inp-lbl">Enter your birth date</div>
+        <input type="date" class="inp" id="astDate" />
+      </div>
+      <button class="btn" onclick="readAstro()">Read My Chart</button>
+      <div class="astro-res" id="astRes">
+        <div class="asym" id="asym"></div>
+        <div class="aname" id="aname"></div>
+        <div class="adates" id="adates"></div>
+        <div class="atraits" id="atraits"></div>
+        <div class="a4grid">
+          <div class="amini"><div class="amini-l">Element</div><div class="amini-v" id="aelem"></div></div>
+          <div class="amini"><div class="amini-l">Modality</div><div class="amini-v" id="amod"></div></div>
+          <div class="amini"><div class="amini-l">Ruling Planet</div><div class="amini-v" id="aplanet"></div></div>
+          <div class="amini"><div class="amini-l">Polarity</div><div class="amini-v" id="apol"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.5s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:1.2s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">Chinese Zodiac</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:11px;width:100%">
+      <div style="display:flex;flex-direction:column;gap:7px;width:100%;align-items:center">
+        <div class="inp-lbl">Enter your birth year</div>
+        <input type="number" class="inp" id="czYear" placeholder="e.g. 1990" min="1900" max="2100" style="max-width:150px" />
+      </div>
+      <button class="btn" onclick="readCZ()">Reveal My Sign</button>
+      <div class="cz-animal" id="czAnimal"></div>
+      <div class="cz-name" id="czName"></div>
+      <div class="cz-elem" id="czElem"></div>
+      <div class="cz-traits" id="czTraits"></div>
+      <div class="cz-years" id="czYears"></div>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.8s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:1.6s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+    <div class="pt">Crystal Pendulum</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
+      <p style="font-family:'IM Fell English',serif;font-style:italic;color:var(--ivory-dim);font-size:12px;opacity:.7;text-align:center">Hold your question in mind</p>
+      <div class="pend-scene" onclick="swingPendulum()">
+        <div class="pend-arm idle" id="pendArm">
+          <div class="pend-thread"></div>
+          <svg class="crystal-svg" viewBox="0 0 30 64" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#eaf8ff" stop-opacity="0.98"/>
+                <stop offset="35%" stop-color="#b0e0ff" stop-opacity="0.9"/>
+                <stop offset="70%" stop-color="#70bef0" stop-opacity="0.88"/>
+                <stop offset="100%" stop-color="#3a7ec8" stop-opacity="0.82"/>
+              </linearGradient>
+              <linearGradient id="cg2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#80c0f0" stop-opacity="0.1"/>
+              </linearGradient>
+              <linearGradient id="cg3" x1="100%" y1="0%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#2050a0" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#90c8ff" stop-opacity="0.1"/>
+              </linearGradient>
+            </defs>
+            <polygon points="15,0 28,10 28,46 15,64 2,46 2,10" fill="url(#cg1)" stroke="rgba(160,220,255,0.5)" stroke-width="0.5"/>
+            <polygon points="2,10 15,0 15,64 2,46" fill="url(#cg2)"/>
+            <polygon points="28,10 15,0 15,64 28,46" fill="url(#cg3)"/>
+            <polygon points="15,0 28,10 15,14 2,10" fill="white" opacity="0.35"/>
+            <line x1="9" y1="8" x2="7" y2="56" stroke="white" stroke-width="1.5" opacity="0.2"/>
+            <line x1="19" y1="5" x2="21" y2="42" stroke="white" stroke-width="0.7" opacity="0.13"/>
+            <circle cx="15" cy="62" r="2" fill="white" opacity="0.55"/>
+            <circle cx="15" cy="1.5" r="1.2" fill="white" opacity="0.85"/>
+          </svg>
+        </div>
+        <div class="pend-labels">
+          <div class="pend-lbl" id="plNo">NO</div>
+          <div class="pend-lbl" id="plYes">YES</div>
+        </div>
+      </div>
+      <div class="pend-ans" id="pendAns"></div>
+      <button class="btn" onclick="swingPendulum()">Ask the Pendulum</button>
+    </div>
+    <div class="cand">
+      <div class="candle"><div class="flame" style="animation-delay:.35s"></div><div class="cbody"></div><div class="cbase"></div></div>
+      <div class="candle"><div class="flame" style="animation-delay:1.05s"></div><div class="cbody"></div><div class="cbase"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">✦ &nbsp; All divinations are for contemplation only &nbsp; ✦</footer>
+</div>
+
+<script>
+// STARS
+(function(){
+  var c=document.getElementById('stars');
+  for(var i=0;i<80;i++){
+    var s=document.createElement('div');
+    s.className='star';
+    var z=Math.random()*1.5+0.5,o=Math.random()*0.15+0.05;
+    s.style.cssText='width:'+z+'px;height:'+z+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--dur:'+(Math.random()*4+2)+'s;--delay:'+(Math.random()*4)+'s;--op:'+o+';opacity:'+o;
+    c.appendChild(s);
+  }
+})();
+
+// 8 BALL
+var ANS=[
+  {t:'It is certain',g:1},{t:'It is decidedly so',g:1},{t:'Without a doubt',g:1},
+  {t:'Yes, definitely',g:1},{t:'You may rely on it',g:1},{t:'As I see it, yes',g:1},
+  {t:'Most likely',g:1},{t:'Outlook good',g:1},{t:'Yes',g:1},{t:'Signs point to yes',g:1},
+  {t:'Reply hazy, try again',g:0},{t:'Ask again later',g:0},{t:'Better not tell you now',g:0},
+  {t:'Cannot predict now',g:0},{t:'Concentrate and ask again',g:0},
+  {t:"Don't count on it",g:-1},{t:'My reply is no',g:-1},{t:'My sources say no',g:-1},
+  {t:'Outlook not so good',g:-1},{t:'Very doubtful',g:-1}
+];
+var bb=false;
+function consult8(){
+  if(bb) return;
+  bb=true;
+  var ball=document.getElementById('eball');
+  var lbl=document.getElementById('elabel');
+  var win=document.getElementById('ewin');
+  var ans=document.getElementById('eans');
+  var res=document.getElementById('eres');
+  win.classList.remove('vis');
+  lbl.classList.remove('hidden');
+  res.classList.remove('show');
+  ball.classList.add('shaking');
+  setTimeout(function(){
+    ball.classList.remove('shaking');
+    lbl.classList.add('hidden');
+    var p=ANS[Math.floor(Math.random()*ANS.length)];
+    ans.textContent=p.t;
+    win.classList.add('vis');
+    res.textContent='"'+p.t+'"';
+    res.style.color=p.g===1?'#a0d4a0':p.g===-1?'#d4a0a0':'#a0c0d4';
+    res.classList.add('show');
+    setTimeout(function(){ bb=false; },400);
+  },700);
+}
+
+// TAROT
+var WC='https://upload.wikimedia.org/wikipedia/commons/';
+var TAROT=[
+  {n:'The Fool',img:WC+'9/90/RWS_Tarot_00_Fool.jpg',u:'New beginnings, innocence, spontaneity',r:'Recklessness, inconsideration'},
+  {n:'The Magician',img:WC+'d/de/RWS_Tarot_01_Magician.jpg',u:'Willpower, skill, manifestation',r:'Manipulation, trickery, illusions'},
+  {n:'The High Priestess',img:WC+'8/88/RWS_Tarot_02_High_Priestess.jpg',u:'Intuition, sacred knowledge, mystery',r:'Secrets withheld, disconnected intuition'},
+  {n:'The Empress',img:WC+'d/d2/RWS_Tarot_03_Empress.jpg',u:'Femininity, beauty, nature, abundance',r:'Creative block, dependence'},
+  {n:'The Emperor',img:WC+'c/c3/RWS_Tarot_04_Emperor.jpg',u:'Authority, establishment, structure',r:'Domination, excessive control, rigidity'},
+  {n:'The Hierophant',img:WC+'8/8d/RWS_Tarot_05_Hierophant.jpg',u:'Spiritual wisdom, tradition, conformity',r:'Personal beliefs, challenging convention'},
+  {n:'The Lovers',img:WC+'3/3a/TheLovers.jpg',u:'Love, harmony, relationships, choices',r:'Disharmony, imbalance, misalignment'},
+  {n:'The Chariot',img:WC+'9/9b/RWS_Tarot_07_Chariot.jpg',u:'Control, willpower, success, determination',r:'Opposition, lack of direction'},
+  {n:'Strength',img:WC+'f/f5/RWS_Tarot_08_Strength.jpg',u:'Courage, patience, compassion, inner strength',r:'Self-doubt, raw emotion, insecurity'},
+  {n:'The Hermit',img:WC+'4/4d/RWS_Tarot_09_Hermit.jpg',u:'Soul-searching, introspection, inner guidance',r:'Isolation, loneliness, withdrawal'},
+  {n:'Wheel of Fortune',img:WC+'3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg',u:'Good luck, karma, life cycles, destiny',r:'Bad luck, resistance to change'},
+  {n:'Justice',img:WC+'e/e0/RWS_Tarot_11_Justice.jpg',u:'Justice, fairness, truth, cause and effect',r:'Unfairness, lack of accountability'},
+  {n:'The Hanged Man',img:WC+'2/2b/RWS_Tarot_12_Hanged_Man.jpg',u:'Pause, surrender, new perspectives',r:'Delays, resistance, stalling'},
+  {n:'Death',img:WC+'d/d7/RWS_Tarot_13_Death.jpg',u:'Endings, change, transformation, transition',r:'Resistance to change, inner purging'},
+  {n:'Temperance',img:WC+'f/f8/RWS_Tarot_14_Temperance.jpg',u:'Balance, moderation, patience, purpose',r:'Imbalance, excess, self-healing'},
+  {n:'The Devil',img:WC+'5/55/RWS_Tarot_15_Devil.jpg',u:'Shadow self, attachment, addiction, restriction',r:'Releasing limiting beliefs, detachment'},
+  {n:'The Tower',img:WC+'5/53/RWS_Tarot_16_Tower.jpg',u:'Sudden change, upheaval, chaos, revelation',r:'Personal transformation, averting disaster'},
+  {n:'The Star',img:WC+'d/db/RWS_Tarot_17_Star.jpg',u:'Hope, faith, purpose, renewal, spirituality',r:'Lack of faith, despair, disconnection'},
+  {n:'The Moon',img:WC+'7/7f/RWS_Tarot_18_Moon.jpg',u:'Illusion, fear, the unconscious, intuition',r:'Release of fear, repressed emotion'},
+  {n:'The Sun',img:WC+'1/17/RWS_Tarot_19_Sun.jpg',u:'Positivity, fun, warmth, success, vitality',r:'Inner child, feeling down, overly optimistic'},
+  {n:'Judgement',img:WC+'d/dd/RWS_Tarot_20_Judgement.jpg',u:'Judgement, rebirth, inner calling, absolution',r:'Self-doubt, inner critic, ignoring the call'},
+  {n:'The World',img:WC+'f/ff/RWS_Tarot_21_World.jpg',u:'Completion, integration, accomplishment',r:'Seeking closure, short-cuts, delays'},
+  {n:'Ace of Wands',img:WC+'1/11/Wands01.jpg',u:'Inspiration, new opportunities, growth',r:'Emerging idea, lack of direction'},
+  {n:'Two of Wands',img:WC+'0/0f/Wands02.jpg',u:'Future planning, progress, decisions',r:'Personal goals, fear of the unknown'},
+  {n:'Three of Wands',img:WC+'f/ff/Wands03.jpg',u:'Progress, expansion, foresight',r:'Playing it safe, unexpected delays'},
+  {n:'Four of Wands',img:WC+'a/a4/Wands04.jpg',u:'Celebration, joy, harmony, homecoming',r:'Personal celebration, inner harmony'},
+  {n:'Five of Wands',img:WC+'9/9d/Wands05.jpg',u:'Conflict, disagreements, competition',r:'Inner conflict, conflict avoidance'},
+  {n:'Six of Wands',img:WC+'3/3b/Wands06.jpg',u:'Success, public recognition, self-confidence',r:'Private achievement, personal success'},
+  {n:'Seven of Wands',img:WC+'7/7b/Wands07.jpg',u:'Challenge, competition, perseverance',r:'Exhaustion, giving up, overwhelmed'},
+  {n:'Eight of Wands',img:WC+'6/6b/Wands08.jpg',u:'Movement, fast-paced change, swift action',r:'Delays, frustration, holding off'},
+  {n:'Nine of Wands',img:WC+'4/4d/Wands09.jpg',u:'Resilience, courage, persistence, boundaries',r:'Struggle, overwhelm, defensive'},
+  {n:'Ten of Wands',img:WC+'0/0b/Wands10.jpg',u:'Burden, extra responsibility, hard work',r:'Carrying the burden, learn to delegate'},
+  {n:'Page of Wands',img:WC+'6/6d/Wands11.jpg',u:'Enthusiasm, exploration, free spirit',r:'Redirecting energy, self-limiting beliefs'},
+  {n:'Knight of Wands',img:WC+'1/16/Wands12.jpg',u:'Energy, passion, inspired action, adventure',r:'Haste, scattered energy, delays'},
+  {n:'Queen of Wands',img:WC+'0/0d/Wands13.jpg',u:'Courage, confidence, independence',r:'Self-respect, introverted'},
+  {n:'King of Wands',img:WC+'c/ce/Wands14.jpg',u:'Natural-born leader, vision, honour',r:'Impulsiveness, ruthless, high expectations'},
+  {n:'Ace of Cups',img:WC+'3/36/Cups01.jpg',u:'Love, new relationships, compassion, creativity',r:'Self-love, repressed emotions'},
+  {n:'Two of Cups',img:WC+'f/f8/Cups02.jpg',u:'Unified love, partnership, mutual attraction',r:'Break-ups, disharmony, distrust'},
+  {n:'Three of Cups',img:WC+'7/7a/Cups03.jpg',u:'Celebration, friendship, creativity, joy',r:'Independence, alone time'},
+  {n:'Four of Cups',img:WC+'3/35/Cups04.jpg',u:'Meditation, contemplation, apathy',r:'Retreat, withdrawal, alignment'},
+  {n:'Five of Cups',img:WC+'d/d7/Cups05.jpg',u:'Regret, failure, disappointment, grief',r:'Self-forgiveness, moving on'},
+  {n:'Six of Cups',img:WC+'1/17/Cups06.jpg',u:'Revisiting the past, childhood memories',r:'Living in the past, forgiveness'},
+  {n:'Seven of Cups',img:WC+'a/ae/Cups07.jpg',u:'Opportunities, choices, wishful thinking',r:'Alignment, personal values'},
+  {n:'Eight of Cups',img:WC+'6/60/Cups08.jpg',u:'Disappointment, withdrawal, walking away',r:'Trying one more time, indecision'},
+  {n:'Nine of Cups',img:WC+'2/24/Cups09.jpg',u:'Contentment, satisfaction, wish come true',r:'Inner happiness, materialism'},
+  {n:'Ten of Cups',img:WC+'8/84/Cups10.jpg',u:'Divine love, blissful relationships, harmony',r:'Disconnection, struggling relationships'},
+  {n:'Page of Cups',img:WC+'a/ad/Cups11.jpg',u:'Creative opportunities, intuitive messages',r:'Doubting intuition, creative blocks'},
+  {n:'Knight of Cups',img:WC+'f/fa/Cups12.jpg',u:'Creativity, romance, charm, imagination',r:'Overactive imagination, moody'},
+  {n:'Queen of Cups',img:WC+'6/62/Cups13.jpg',u:'Compassionate, emotionally stable, intuitive',r:'Inner feelings, self-care, co-dependency'},
+  {n:'King of Cups',img:WC+'0/04/Cups14.jpg',u:'Emotionally balanced, compassionate, diplomatic',r:'Moodiness, emotionally manipulative'},
+  {n:'Ace of Swords',img:WC+'1/1a/Swords01.jpg',u:'Breakthroughs, new ideas, mental clarity',r:'Re-thinking an idea, clouded judgement'},
+  {n:'Two of Swords',img:WC+'9/9e/Swords02.jpg',u:'Difficult decisions, an impasse, avoidance',r:'Indecision, information overload'},
+  {n:'Three of Swords',img:WC+'0/02/Swords03.jpg',u:'Heartbreak, emotional pain, sorrow, grief',r:'Releasing pain, optimism, forgiveness'},
+  {n:'Four of Swords',img:WC+'b/bf/Swords04.jpg',u:'Rest, relaxation, meditation, recuperation',r:'Exhaustion, burnout, stagnation'},
+  {n:'Five of Swords',img:WC+'2/23/Swords05.jpg',u:'Conflict, defeat, winning at all costs',r:'Reconciliation, making amends'},
+  {n:'Six of Swords',img:WC+'2/29/Swords06.jpg',u:'Transition, change, releasing baggage',r:'Resistance to change, unfinished business'},
+  {n:'Seven of Swords',img:WC+'3/34/Swords07.jpg',u:'Betrayal, deception, stealth',r:'Imposter syndrome, self-deceit'},
+  {n:'Eight of Swords',img:WC+'a/a7/Swords08.jpg',u:'Negative thoughts, self-imposed restriction',r:'Inner critic, open to new perspectives'},
+  {n:'Nine of Swords',img:WC+'2/2f/Swords09.jpg',u:'Anxiety, worry, fear, nightmares',r:'Inner turmoil, releasing worry'},
+  {n:'Ten of Swords',img:WC+'d/d6/Swords10.jpg',u:'Painful endings, betrayal, loss, crisis',r:'Recovery, regeneration'},
+  {n:'Page of Swords',img:WC+'4/4c/Swords11.jpg',u:'New ideas, curiosity, thirst for knowledge',r:'All talk no action, haphazard'},
+  {n:'Knight of Swords',img:WC+'b/b0/Swords12.jpg',u:'Ambitious, action-oriented, fast-thinking',r:'Restless, unfocused, impulsive'},
+  {n:'Queen of Swords',img:WC+'d/d4/Swords13.jpg',u:'Independent judgement, clear boundaries',r:'Overly-emotional, cold-hearted'},
+  {n:'King of Swords',img:WC+'3/33/Swords14.jpg',u:'Mental clarity, intellectual power, truth',r:'Misuse of power, manipulation'},
+  {n:'Ace of Pentacles',img:WC+'f/fd/Pents01.jpg',u:'A new financial opportunity, manifestation',r:'Lost opportunity, lack of planning'},
+  {n:'Two of Pentacles',img:WC+'9/9f/Pents02.jpg',u:'Multiple priorities, time management',r:'Over-committed, disorganisation'},
+  {n:'Three of Pentacles',img:WC+'4/42/Pents03.jpg',u:'Teamwork, collaboration, learning, craft',r:'Disharmony, working alone'},
+  {n:'Four of Pentacles',img:WC+'3/35/Pents04.jpg',u:'Saving money, security, control',r:'Over-spending, greed'},
+  {n:'Five of Pentacles',img:WC+'9/96/Pents05.jpg',u:'Financial loss, poverty, isolation, worry',r:'Recovery from financial loss'},
+  {n:'Six of Pentacles',img:WC+'a/a6/Pents06.jpg',u:'Giving, receiving, sharing wealth, generosity',r:'Self-care, unpaid debts'},
+  {n:'Seven of Pentacles',img:WC+'6/6a/Pents07.jpg',u:'Long-term view, perseverance, investment',r:'Lack of long-term vision'},
+  {n:'Eight of Pentacles',img:WC+'4/49/Pents08.jpg',u:'Apprenticeship, mastery, skill development',r:'Perfectionism, misdirected activity'},
+  {n:'Nine of Pentacles',img:WC+'f/f0/Pents09.jpg',u:'Abundance, luxury, self-sufficiency',r:'Self-worth, over-investment in work'},
+  {n:'Ten of Pentacles',img:WC+'4/42/Pents10.jpg',u:'Wealth, financial security, family, legacy',r:'Financial failure, the dark side of wealth'},
+  {n:'Page of Pentacles',img:WC+'e/ec/Pents11.jpg',u:'Opportunity, ambition, diligence',r:'Lack of progress, procrastination'},
+  {n:'Knight of Pentacles',img:WC+'d/d5/Pents12.jpg',u:'Hard work, productivity, routine, reliability',r:'Boredom, feeling stuck, perfectionism'},
+  {n:'Queen of Pentacles',img:WC+'8/88/Pents13.jpg',u:'Practicality, financial security, nurturing',r:'Self-care, work-home conflict'},
+  {n:'King of Pentacles',img:WC+'1/1c/Pents14.jpg',u:'Wealth, business, leadership, abundance',r:'Obsessed with wealth, stubborn'}
+];
+var tb=false;
+function drawTarot(){
+  if(tb) return;
+  tb=true;
+  var card=TAROT[Math.floor(Math.random()*TAROT.length)];
+  var rev=Math.random()<0.3;
+  var tc=document.getElementById('tcrev');
+  var ti=document.getElementById('tcinfo');
+  var img=document.getElementById('tcimg');
+  ti.classList.remove('show');
+  tc.classList.remove('show','rev');
+  img.src=card.img;
+  img.alt=card.n;
+  setTimeout(function(){
+    tc.classList.add('show');
+    if(rev) tc.classList.add('rev');
+    document.getElementById('tcname').textContent=card.n;
+    var tor=document.getElementById('tcor');
+    tor.textContent=rev?'↓ Reversed':'↑ Upright';
+    tor.style.color=rev?'#d4a0a0':'#a0d4a0';
+    document.getElementById('tcmean').textContent=rev?card.r:card.u;
+    setTimeout(function(){ ti.classList.add('show'); tb=false; },600);
+  },300);
+}
+
+// RUNES
+var RUNES=[
+  {s:'ᚠ',n:'Fehu',m:'Wealth, prosperity, new beginnings, abundance flowing freely'},
+  {s:'ᚢ',n:'Uruz',m:'Strength, untamed potential, primal force, raw vitality'},
+  {s:'ᚦ',n:'Thurisaz',m:'Thor\'s hammer, protection, conflict, forceful breakthrough'},
+  {s:'ᚨ',n:'Ansuz',m:'Divine inspiration, communication, the breath of wisdom'},
+  {s:'ᚱ',n:'Raidho',m:'Journey, right action, movement, the rhythm of life\'s road'},
+  {s:'ᚲ',n:'Kenaz',m:'Illumination, creative fire, knowledge dispelling darkness'},
+  {s:'ᚷ',n:'Gebo',m:'Gift, partnership, generosity, the sacred exchange'},
+  {s:'ᚹ',n:'Wunjo',m:'Joy, harmony, fellowship, the warmth of belonging'},
+  {s:'ᚺ',n:'Hagalaz',m:'Hail, disruption, radical change that forces transformation'},
+  {s:'ᚾ',n:'Nauthiz',m:'Necessity, hardship, the strength found in constraint'},
+  {s:'ᛁ',n:'Isa',m:'Ice, stillness, a standstill inviting deep introspection'},
+  {s:'ᛃ',n:'Jera',m:'Harvest, natural cycles, patience rewarded in due season'},
+  {s:'ᛇ',n:'Eihwaz',m:'Yew tree, endurance, the axis between death and rebirth'},
+  {s:'ᛈ',n:'Perthro',m:'Fate, hidden mysteries, what chance and wyrd conceal'},
+  {s:'ᛉ',n:'Algiz',m:'Protection, defence, reaching toward the higher self'},
+  {s:'ᛊ',n:'Sowilo',m:'Sun, success, wholeness, the radiant vital energy within'},
+  {s:'ᛏ',n:'Tiwaz',m:'Justice, honour, victory through sacrifice and courage'},
+  {s:'ᛒ',n:'Berkano',m:'Growth, rebirth, the nurturing power of new beginnings'},
+  {s:'ᛖ',n:'Ehwaz',m:'Horse, progress, trust, the harmony of soul and will'},
+  {s:'ᛗ',n:'Mannaz',m:'Humanity, self-awareness, our place in the greater whole'},
+  {s:'ᛚ',n:'Laguz',m:'Water, intuition, the deep currents of the unconscious'},
+  {s:'ᛜ',n:'Ingwaz',m:'Fertility, gestation, the silent ripening of potential'},
+  {s:'ᛞ',n:'Dagaz',m:'Dawn, breakthrough, the threshold of awakening and clarity'},
+  {s:'ᛟ',n:'Othala',m:'Ancestry, inheritance, the sacred homeland of the soul'}
+];
+var rb=false;
+function castRune(){
+  if(rb) return;
+  rb=true;
+  var bag=document.getElementById('rbag');
+  var sym=document.getElementById('rsym');
+  var nm=document.getElementById('rnm');
+  var mn=document.getElementById('rmn');
+  sym.classList.remove('show');
+  nm.classList.remove('show');
+  mn.classList.remove('show');
+  bag.classList.add('shaking');
+  setTimeout(function(){
+    bag.classList.remove('shaking');
+    var r=RUNES[Math.floor(Math.random()*RUNES.length)];
+    sym.textContent=r.s;
+    nm.textContent=r.n;
+    mn.textContent=r.m;
+    sym.classList.add('show');
+    setTimeout(function(){ nm.classList.add('show'); mn.classList.add('show'); rb=false; },200);
+  },560);
+}
+
+// I CHING
+var HEX=[
+  {n:"Ch'ien — The Creative",s:'☰',m:'Heaven above, pure yang. Creative power initiates all things.'},
+  {n:"K'un — The Receptive",s:'☷',m:'Earth below, pure yin. Yielding, nurturing, open acceptance.'},
+  {n:'Chun — Difficulty at the Beginning',s:'☳',m:'Initial hardship precedes eventual order and growth.'},
+  {n:"Mêng — Youthful Folly",s:'☶',m:'The young mind seeks a teacher. Learning through experience.'},
+  {n:"Hsü — Waiting",s:'☵',m:'Patient, nourished waiting. The right moment will come.'},
+  {n:'Sung — Conflict',s:'☰',m:'Opposition is present. Seek compromise, avoid prolonged dispute.'},
+  {n:"Shih — The Army",s:'☷',m:'Discipline and leadership bring collective effort to fruition.'},
+  {n:'Pi — Holding Together',s:'☵',m:'Union built on sincerity endures. Seek genuine alliance.'},
+  {n:"T'ai — Peace",s:'☷',m:'Heaven and earth commune. Harmony and great prosperity prevail.'},
+  {n:"P'i — Standstill",s:'☰',m:'Stagnation. Withdraw and preserve your inner worth.'},
+  {n:"T'ung Jên — Fellowship",s:'☰',m:'Community of open hearts and shared purpose brings success.'},
+  {n:'Ta Yu — Great Possession',s:'☲',m:'Abundance radiates from inner virtue. Fire in heaven.'},
+  {n:"Ch'ien — Modesty",s:'☷',m:'The modest person achieves lasting success through balance.'},
+  {n:"Yü — Enthusiasm",s:'☳',m:'Inspiration ignites decisive action. Arouse the energy within.'},
+  {n:'Sui — Following',s:'☳',m:'Adaptability, following the current, joyful acceptance of change.'},
+  {n:'Ku — Work on the Decayed',s:'☶',m:'Corruption must be corrected. Repair what has been spoiled.'},
+  {n:'Lin — Approach',s:'☷',m:'An auspicious arrival. Draw near with care and good intention.'},
+  {n:'Kuan — Contemplation',s:'☴',m:'Observe deeply. Look within to understand what lies without.'},
+  {n:'Shih Ho — Biting Through',s:'☲',m:'Break through obstacles with decisive action and clear justice.'},
+  {n:'Pi — Grace',s:'☶',m:'Beauty, adornment, outer form. Elegance serves the spirit.'},
+  {n:'Po — Splitting Apart',s:'☶',m:'Erosion strips away the old. Accept the natural dissolution.'},
+  {n:'Fu — Return',s:'☷',m:'A turning point. The light returns and natural renewal begins.'},
+  {n:'Wu Wang — Innocence',s:'☳',m:'Act without guile. Unexpected events bring natural truth.'},
+  {n:"Ta Ch'u — Great Taming",s:'☶',m:'Accumulate great potential. Store power for the right moment.'},
+  {n:'I — Nourishment',s:'☶',m:'Attend to nourishment of body and spirit. What do you consume?'},
+  {n:'Ta Kuo — Great Excess',s:'☴',m:'Extraordinary times call for extraordinary measures.'},
+  {n:"K'an — The Abysmal",s:'☵',m:'Danger, the deep water. Persevere with sincerity through the abyss.'},
+  {n:'Li — The Clinging',s:'☲',m:'Fire, clarity, attachment to what gives light and warmth.'},
+  {n:'Hsien — Influence',s:'☴',m:'Mutual attraction and responsiveness. The gentle approach succeeds.'},
+  {n:"Hêng — Duration",s:'☳',m:'Perseverance endures. Long-lasting relationships built with patience.'},
+  {n:'Tun — Retreat',s:'☰',m:'Strategic withdrawal. Knowing when to step back is true wisdom.'},
+  {n:'Ta Chuang — Great Power',s:'☳',m:'Vigor and great strength. Beware misusing power through haste.'},
+  {n:'Chin — Progress',s:'☲',m:'Advancing steadily and gaining recognition. The sunrise spreads.'},
+  {n:'Ming I — Darkening of the Light',s:'☷',m:'Inner light persists through outer darkness. Conceal brilliance.'},
+  {n:"Chia Jên — The Family",s:'☴',m:'Order begins within the home. Each plays their proper role.'},
+  {n:"K'uei — Opposition",s:'☲',m:'Polarity and misunderstanding. Small matters still succeed.'},
+  {n:'Chien — Obstruction',s:'☵',m:'Obstacles block the path. Seek help and look within.'},
+  {n:'Hsieh — Deliverance',s:'☳',m:'Release and liberation from difficulty. Swift resolution is possible.'},
+  {n:'Sun — Decrease',s:'☶',m:'Simplify. Voluntary decrease brings inner enrichment.'},
+  {n:'I — Increase',s:'☴',m:'Expansion and benefit. Blessings flow from heaven to earth.'},
+  {n:'Kuai — Breakthrough',s:'☰',m:'Resolve with determination. Speak truth openly, remove corruption.'},
+  {n:'Kou — Coming to Meet',s:'☰',m:'An unexpected encounter. Be vigilant of enticing temptation.'},
+  {n:"Ts'ui — Gathering Together",s:'☷',m:'Congregation of the like-minded. Collective energy rises.'},
+  {n:"Shêng — Pushing Upward",s:'☷',m:'Plant the seed and grow. Gradual rise through persistent effort.'},
+  {n:"K'un — Oppression",s:'☵',m:'Exhaustion and adversity. The superior person endures with inner strength.'},
+  {n:'Ching — The Well',s:'☵',m:'Draw from the inexhaustible depths. The source within never runs dry.'},
+  {n:'Ko — Revolution',s:'☲',m:'Radical change and transformation. The right time to act has come.'},
+  {n:'Ting — The Cauldron',s:'☴',m:'The sacred vessel transforms raw matter into nourishment.'},
+  {n:"Chên — The Arousing",s:'☳',m:'Shock and thunder. Sudden awakening; fear gives way to growth.'},
+  {n:"Kên — Keeping Still",s:'☶',m:'The mountain stands still. Stop, meditate, and reflect deeply.'},
+  {n:'Chien — Development',s:'☴',m:'Gradual progress like the goose in steady flight. Step by step.'},
+  {n:'Kuei Mei — The Marrying Maiden',s:'☳',m:'Subordinate positions and incomplete unions. Proceed carefully.'},
+  {n:"Fêng — Abundance",s:'☳',m:'The peak of fullness. Great abundance that cannot last forever.'},
+  {n:"Lü — The Wanderer",s:'☲',m:'The traveller adapts. Wisdom found in the unfamiliar.'},
+  {n:'Sun — The Gentle',s:'☴',m:'Penetrating wind. Gentle, subtle persistence achieves what force cannot.'},
+  {n:'Tui — The Joyous',s:'☱',m:'Joy like an open lake. Delight in communication and fellowship.'},
+  {n:'Huan — Dispersion',s:'☴',m:'Dissolution scatters rigidity. Let go of what has hardened.'},
+  {n:'Chieh — Limitation',s:'☵',m:'Healthy boundaries and moderation bring sustainable order.'},
+  {n:'Chung Fu — Inner Truth',s:'☴',m:'Sincerity felt at the core. Truth resonates without a word.'},
+  {n:'Hsiao Kuo — Small Excess',s:'☳',m:'Small matters, humble action. Do not overreach at this time.'},
+  {n:'Chi Chi — After Completion',s:'☵',m:'Order achieved. Stay vigilant — completion is not the end.'},
+  {n:'Wei Chi — Before Completion',s:'☲',m:'On the threshold. Approach the new beginning with great care.'}
+];
+var icb=false;
+function castIChing(){
+  if(icb) return;
+  icb=true;
+  var hd=document.getElementById('hexd');
+  var inm=document.getElementById('icnm');
+  var imn=document.getElementById('icmn');
+  var lr=document.getElementById('lrow');
+  hd.classList.remove('show');
+  inm.classList.remove('show');
+  imn.classList.remove('show');
+  lr.innerHTML='';
+  var ids=['ic1','ic2','ic3'];
+  for(var i=0;i<ids.length;i++){
+    (function(idx){
+      setTimeout(function(){
+        var c=document.getElementById(ids[idx]);
+        c.classList.add('flip');
+        setTimeout(function(){ c.classList.remove('flip'); },620);
+      },idx*130);
+    })(i);
+  }
+  setTimeout(function(){
+    var h=HEX[Math.floor(Math.random()*HEX.length)];
+    hd.textContent=h.s;
+    inm.textContent=h.n;
+    imn.textContent=h.m;
+    for(var i=0;i<6;i++){
+      (function(idx){
+        var sp=document.createElement('span');
+        sp.className='lsym';
+        sp.textContent=Math.random()<0.5?'—':'- -';
+        lr.appendChild(sp);
+        setTimeout(function(){ sp.classList.add('show'); },idx*80);
+      })(i);
+    }
+    setTimeout(function(){
+      hd.classList.add('show');
+      inm.classList.add('show');
+      imn.classList.add('show');
+      icb=false;
+    },400);
+  },720);
+}
+
+// ASTROLOGY
+var SIGNS=[
+  {n:'Aries',s:'♈',d:'Mar 21 – Apr 19',e:'Fire',m:'Cardinal',p:'Mars',po:'Positive',t:'Bold and ambitious, you charge forward with passionate conviction. A natural initiator who leads from the fire of the self.'},
+  {n:'Taurus',s:'♉',d:'Apr 20 – May 20',e:'Earth',m:'Fixed',p:'Venus',po:'Negative',t:'Patient, reliable, sensual. You seek comfort and beauty, building stability with enduring, unhurried grace.'},
+  {n:'Gemini',s:'♊',d:'May 21 – Jun 20',e:'Air',m:'Mutable',p:'Mercury',po:'Positive',t:'Curious, adaptable, and gloriously witty. Your mind is a kaleidoscope alive with ideas and ceaseless questions.'},
+  {n:'Cancer',s:'♋',d:'Jun 21 – Jul 22',e:'Water',m:'Cardinal',p:'Moon',po:'Negative',t:'Intuitive and deeply feeling. Home and family are your sacred center of gravity, sheltered under the soft moon.'},
+  {n:'Leo',s:'♌',d:'Jul 23 – Aug 22',e:'Fire',m:'Fixed',p:'Sun',po:'Positive',t:'Generous, loyal, and theatrical. You are the sun around which others naturally and warmly orbit.'},
+  {n:'Virgo',s:'♍',d:'Aug 23 – Sep 22',e:'Earth',m:'Mutable',p:'Mercury',po:'Negative',t:'Analytical and devoted. You perceive what others miss, serving with exquisite precision and quiet excellence.'},
+  {n:'Libra',s:'♎',d:'Sep 23 – Oct 22',e:'Air',m:'Cardinal',p:'Venus',po:'Positive',t:'Harmonious and idealistic. You seek beauty, balance, and justice, weighing all things on the scales of the heart.'},
+  {n:'Scorpio',s:'♏',d:'Oct 23 – Nov 21',e:'Water',m:'Fixed',p:'Pluto',po:'Negative',t:'Intense and transformative. You see through surfaces into the hidden truth, drawn to the depths of mystery.'},
+  {n:'Sagittarius',s:'♐',d:'Nov 22 – Dec 21',e:'Fire',m:'Mutable',p:'Jupiter',po:'Positive',t:'Philosophical and adventurous. You pursue the horizon with arrows of aspiration and an unquenchable joy.'},
+  {n:'Capricorn',s:'♑',d:'Dec 22 – Jan 19',e:'Earth',m:'Cardinal',p:'Saturn',po:'Negative',t:'Disciplined and pragmatic. You climb with patient purpose toward your highest peak, step by patient step.'},
+  {n:'Aquarius',s:'♒',d:'Jan 20 – Feb 18',e:'Air',m:'Fixed',p:'Uranus',po:'Positive',t:'Visionary and humanitarian. You march to a distant drum only you can fully hear, dreaming new worlds into being.'},
+  {n:'Pisces',s:'♓',d:'Feb 19 – Mar 20',e:'Water',m:'Mutable',p:'Neptune',po:'Negative',t:'Dreamy and empathetic. You dissolve the boundaries between self and world, swimming in the ocean of all feeling.'}
+];
+function getSign(mo,dy){
+  if(mo===1) return dy<=19?SIGNS[9]:SIGNS[10];
+  if(mo===2) return dy<=18?SIGNS[10]:SIGNS[11];
+  if(mo===3) return dy<=20?SIGNS[11]:SIGNS[0];
+  if(mo===4) return dy<=19?SIGNS[0]:SIGNS[1];
+  if(mo===5) return dy<=20?SIGNS[1]:SIGNS[2];
+  if(mo===6) return dy<=20?SIGNS[2]:SIGNS[3];
+  if(mo===7) return dy<=22?SIGNS[3]:SIGNS[4];
+  if(mo===8) return dy<=22?SIGNS[4]:SIGNS[5];
+  if(mo===9) return dy<=22?SIGNS[5]:SIGNS[6];
+  if(mo===10) return dy<=22?SIGNS[6]:SIGNS[7];
+  if(mo===11) return dy<=21?SIGNS[7]:SIGNS[8];
+  return dy<=21?SIGNS[8]:SIGNS[9];
+}
+function readAstro(){
+  var val=document.getElementById('astDate').value;
+  if(!val){ alert('Please enter your birth date.'); return; }
+  var d=new Date(val+'T12:00:00');
+  var sg=getSign(d.getMonth()+1,d.getDate());
+  var res=document.getElementById('astRes');
+  res.classList.remove('show');
+  document.getElementById('asym').textContent=sg.s;
+  document.getElementById('aname').textContent=sg.n;
+  document.getElementById('adates').textContent=sg.d;
+  document.getElementById('atraits').textContent=sg.t;
+  document.getElementById('aelem').textContent=sg.e;
+  document.getElementById('amod').textContent=sg.m;
+  document.getElementById('aplanet').textContent=sg.p;
+  document.getElementById('apol').textContent=sg.po;
+  setTimeout(function(){ res.classList.add('show'); },50);
+}
+
+// CHINESE ZODIAC
+var CZ=[
+  {n:'Rat',e:'🐀',el:'Water',t:'Clever, resourceful, quick-witted, and charming with an insatiable natural curiosity.',ys:[1900,1912,1924,1936,1948,1960,1972,1984,1996,2008,2020,2032]},
+  {n:'Ox',e:'🐂',el:'Earth',t:'Diligent, dependable, and deeply trustworthy. Strength built slowly, like stone on stone.',ys:[1901,1913,1925,1937,1949,1961,1973,1985,1997,2009,2021,2033]},
+  {n:'Tiger',e:'🐅',el:'Wood',t:'Brave, confident, and magnetically charismatic. The forest bends before your passage.',ys:[1902,1914,1926,1938,1950,1962,1974,1986,1998,2010,2022,2034]},
+  {n:'Rabbit',e:'🐇',el:'Wood',t:'Gentle, elegant, and alert. A refined soul who values peace, beauty, and quiet joy.',ys:[1903,1915,1927,1939,1951,1963,1975,1987,1999,2011,2023,2035]},
+  {n:'Dragon',e:'🐉',el:'Earth',t:'Lucky, eccentric, and imaginative. The only mythical creature — radiant with sovereign power.',ys:[1904,1916,1928,1940,1952,1964,1976,1988,2000,2012,2024,2036]},
+  {n:'Snake',e:'🐍',el:'Fire',t:'Enigmatic, wise, and deeply intuitive. Still waters that conceal extraordinary depths.',ys:[1905,1917,1929,1941,1953,1965,1977,1989,2001,2013,2025,2037]},
+  {n:'Horse',e:'🐴',el:'Fire',t:'Energetic, free-spirited, and warm. The soul of the eternal traveller, always seeking.',ys:[1906,1918,1930,1942,1954,1966,1978,1990,2002,2014,2026,2038]},
+  {n:'Goat',e:'🐐',el:'Earth',t:'Calm, sympathetic, and deeply creative. A gentle spirit with a natural love of beauty.',ys:[1907,1919,1931,1943,1955,1967,1979,1991,2003,2015,2027,2039]},
+  {n:'Monkey',e:'🐒',el:'Metal',t:'Sharp, curious, and gloriously mischievous. The wittiest mind in the celestial menagerie.',ys:[1908,1920,1932,1944,1956,1968,1980,1992,2004,2016,2028,2040]},
+  {n:'Rooster',e:'🐓',el:'Metal',t:'Observant, hardworking, and honest. Proud and precise in all endeavours, bright as dawn.',ys:[1909,1921,1933,1945,1957,1969,1981,1993,2005,2017,2029,2041]},
+  {n:'Dog',e:'🐕',el:'Earth',t:'Loyal, courageous, and faithful. The truest and most steadfast companion under all the stars.',ys:[1910,1922,1934,1946,1958,1970,1982,1994,2006,2018,2030,2042]},
+  {n:'Pig',e:'🐖',el:'Water',t:'Compassionate, generous, and honest. A warm, forgiving spirit of abiding integrity.',ys:[1911,1923,1935,1947,1959,1971,1983,1995,2007,2019,2031,2043]}
+];
+var CZ_ELEMS=['Metal','Water','Wood','Fire','Earth'];
+function readCZ(){
+  var yr=parseInt(document.getElementById('czYear').value);
+  if(isNaN(yr)||yr<1000||yr>2200){ alert('Please enter a valid birth year.'); return; }
+  var idx=((yr-1900)%12+12)%12;
+  var a=CZ[idx];
+  var elemIdx=Math.floor(((yr-1900)%10)/2);
+  var elem=CZ_ELEMS[elemIdx];
+  var yy=yr%2===0?'Yang':'Yin';
+  document.getElementById('czAnimal').textContent=a.e;
+  document.getElementById('czName').textContent='Year of the '+a.n;
+  document.getElementById('czElem').textContent=elem+' '+yy+' · '+a.el+' Animal';
+  document.getElementById('czTraits').textContent=a.t;
+  var nearby=a.ys.filter(function(y){ return y>=yr-25&&y<=yr+25; });
+  document.getElementById('czYears').textContent='Years: '+nearby.join(' · ');
+  var ids=['czAnimal','czName','czElem','czTraits','czYears'];
+  for(var i=0;i<ids.length;i++){
+    (function(idx2){
+      var el=document.getElementById(ids[idx2]);
+      el.classList.remove('show');
+      setTimeout(function(){ el.classList.add('show'); },idx2*90);
+    })(i);
+  }
+}
+
+// PENDULUM
+var pendBusy=false;
+window.addEventListener('load',function(){
+  document.getElementById('pendArm').classList.add('idle');
+});
+function swingPendulum(){
+  if(pendBusy) return;
+  pendBusy=true;
+  var arm=document.getElementById('pendArm');
+  var ans=document.getElementById('pendAns');
+  var plYes=document.getElementById('plYes');
+  var plNo=document.getElementById('plNo');
+  ans.classList.remove('show');
+  ans.textContent='';
+  plYes.className='pend-lbl';
+  plNo.className='pend-lbl';
+  arm.className='pend-arm going';
+  var isYes=Math.random()<0.5;
+  setTimeout(function(){
+    if(isYes){
+      plYes.classList.add('lit-yes');
+      ans.textContent='YES';
+      ans.style.color='#6eff90';
+      ans.style.textShadow='0 0 20px rgba(80,255,120,0.9)';
+    } else {
+      plNo.classList.add('lit-no');
+      ans.textContent='NO';
+      ans.style.color='#ff8080';
+      ans.style.textShadow='0 0 20px rgba(255,80,80,0.9)';
+    }
+    ans.classList.add('show');
+  },1800);
+  setTimeout(function(){
+    arm.className='pend-arm idle';
+    pendBusy=false;
+  },6900);
+}
+</script>
+</body>
+</html>
