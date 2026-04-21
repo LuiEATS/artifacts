@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cork: #c8935a;
+    --wood: #8B5E3C;
+    --note-yellow: #fef08a;
+    --note-pink: #f9a8d4;
+    --note-blue: #93c5fd;
+    --note-green: #86efac;
+    --note-orange: #fdba74;
+    --note-purple: #c4b5fd;
+    --note-red: #fca5a5;
+    --note-teal: #5eead4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: #2c1810;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 60px;
+    font-family: 'Caveat', cursive;
+  }
+  h1 {
+    color: #f5e6d3;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-shadow: 2px 3px 6px rgba(0,0,0,0.5);
+  }
+
+  /* FILE DROP ZONE */
+  .drop-zone-wrapper { width: 100%; max-width: 1600px; margin-bottom: 18px; }
+  .drop-zone {
+    border: 3px dashed rgba(245,230,211,0.4);
+    border-radius: 6px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    background: rgba(255,255,255,0.04);
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.drag-file-over {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(245,230,211,0.75);
+  }
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .drop-icon { font-size: 2rem; flex-shrink: 0; }
+  .drop-text { color: #f5e6d3; }
+  .drop-text strong { display: block; font-size: 1.2rem; font-weight: 700; }
+  .drop-text span { font-size: 0.95rem; opacity: 0.65; }
+  .drop-actions { margin-left: auto; display: flex; gap: 10px; flex-shrink: 0; }
+  .pill-btn {
+    font-family: 'Caveat', cursive; font-size: 1rem;
+    padding: 5px 16px; border-radius: 20px; border: none;
+    cursor: pointer; transition: transform 0.1s; font-weight: 600;
+  }
+  .pill-btn:hover { transform: scale(1.06); }
+  .pill-btn.clear { background: #ef4444; color: white; }
+  .pill-btn.reload { background: #fef08a; color: #292524; }
+  .file-status {
+    font-size: 0.95rem; color: #86efac;
+    margin-top: 5px; padding-left: 4px;
+    min-height: 1.2em; font-family: 'Caveat', cursive;
+  }
+
+  /* CORK BOARD */
+  .board {
+    background-color: var(--cork);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23c8935a'/%3E%3Ccircle cx='1' cy='1' r='0.6' fill='%23b8823a' opacity='0.4'/%3E%3Ccircle cx='3' cy='3' r='0.5' fill='%23d8a56a' opacity='0.3'/%3E%3Ccircle cx='3' cy='1' r='0.4' fill='%23a87030' opacity='0.35'/%3E%3Ccircle cx='1' cy='3' r='0.7' fill='%23c09050' opacity='0.25'/%3E%3C/svg%3E");
+    border: 14px solid var(--wood);
+    border-radius: 8px;
+    box-shadow: 0 0 0 3px #5a3520, 0 20px 60px rgba(0,0,0,0.6), inset 0 2px 8px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 1600px;
+    padding: 24px 18px 28px;
+    position: relative;
+    overflow-x: auto;
+  }
+  .board::before {
+    content: '';
+    position: absolute; inset: -14px; border-radius: 8px;
+    background: repeating-linear-gradient(88deg, transparent 0px, transparent 12px, rgba(0,0,0,0.04) 12px, rgba(0,0,0,0.04) 13px);
+    pointer-events: none;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(160px, 1fr));
+    gap: 0;
+    min-width: 900px;
+  }
+
+  .day-col {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 10px;
+  }
+  .day-col:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0; width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 6px,
+      transparent 6px, transparent 13px
+    );
+  }
+
+  .day-header { text-align: center; margin-bottom: 14px; padding-top: 4px; }
+  .day-header span {
+    display: inline-block;
+    background: #fefce8;
+    padding: 4px 14px 5px;
+    border-radius: 3px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #292524;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.6) inset;
+    transform: rotate(var(--hrot, -0.8deg));
+    position: relative;
+    white-space: nowrap;
+  }
+  .day-header span::before {
+    content: '';
+    position: absolute; top: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 0 0 2px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+  .day-col:nth-child(1) .day-header span::before { background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b); }
+  .day-col:nth-child(2) .day-header span::before { background: radial-gradient(circle at 35% 35%, #a78bfa, #6d28d9); }
+  .day-col:nth-child(3) .day-header span::before { background: radial-gradient(circle at 35% 35%, #4ade80, #15803d); }
+  .day-col:nth-child(4) .day-header span::before { background: radial-gradient(circle at 35% 35%, #38bdf8, #0284c7); }
+  .day-col:nth-child(5) .day-header span::before { background: radial-gradient(circle at 35% 35%, #fcd34d, #b45309); }
+  .day-col:nth-child(6) .day-header span::before { background: radial-gradient(circle at 35% 35%, #f87171, #dc2626); }
+  .day-col:nth-child(7) .day-header span::before { background: radial-gradient(circle at 35% 35%, #c4b5fd, #7c3aed); }
+
+  .notes-top {
+    display: flex; flex-direction: column; gap: 10px;
+    min-height: 200px; padding: 4px 4px 12px;
+    border-radius: 4px; transition: background 0.15s; flex: 1;
+  }
+  .notes-bottom {
+    display: flex; flex-direction: column; gap: 10px;
+    min-height: 160px; padding: 4px 4px 8px;
+    border-radius: 4px; transition: background 0.15s;
+  }
+
+  .day-divider {
+    height: 3px; margin: 0 2px 12px; border-radius: 2px; flex-shrink: 0;
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0.25) 0px, rgba(0,0,0,0.25) 8px, transparent 8px, transparent 16px);
+    position: relative;
+  }
+  .day-divider::before {
+    content: 'notes';
+    position: absolute; top: -10px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Caveat', cursive; font-size: 0.78rem;
+    color: rgba(0,0,0,0.3); white-space: nowrap; letter-spacing: 0.06em;
+  }
+
+  .add-btns { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; flex-shrink: 0; }
+  .add-btn {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    width: 100%; padding: 5px 4px;
+    background: rgba(255,255,255,0.10);
+    border: 2px dashed rgba(255,255,255,0.28);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Caveat', cursive; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .add-btn:hover { background: rgba(255,255,255,0.18); color: white; border-color: rgba(255,255,255,0.5); }
+
+  /* ══════════════════════════════
+     STICKY NOTE
+  ══════════════════════════════ */
+  .note {
+    border-radius: 2px;
+    padding: 22px 22px 18px 28px;
+    font-family: 'Caveat', cursive;
+    font-size: 0.98rem;
+    line-height: 1.4;
+    color: #1c1917;
+    position: relative;
+    cursor: default;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.28), 0 1px 0 rgba(255,255,255,0.5) inset;
+    transform: rotate(var(--rot, -1.5deg));
+    transition: box-shadow 0.15s, transform 0.18s;
+    user-select: none;
+    word-break: break-word;
+    animation: popIn 0.22s ease both;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: rotate(var(--rot,-1.5deg)) scale(0.7); }
+    to   { opacity: 1; transform: rotate(var(--rot,-1.5deg)) scale(1); }
+  }
+  .note:hover { box-shadow: 4px 8px 18px rgba(0,0,0,0.35); z-index: 10; }
+
+  /* Pushpin — background: transparent so no white flash before color class loads */
+  .note::before {
+    content: '';
+    position: absolute; top: -7px; left: 50%;
+    transform: translateX(-50%);
+    width: 11px; height: 11px; border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.35), 0 0 0 1.5px rgba(0,0,0,0.2);
+    z-index: 15;
+  }
+  .note.tape::after {
+    content: '';
+    position: absolute; top: -5px; left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 44px; height: 14px;
+    background: rgba(255,255,255,0.38);
+    border: 1px solid rgba(200,200,200,0.5);
+    border-radius: 2px;
+    z-index: 4;
+  }
+  .note .fold {
+    position: absolute; bottom: 0; right: 0;
+    width: 16px; height: 16px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.12) 50%);
+    border-radius: 0 0 2px 0;
+    pointer-events: none;
+  }
+
+  /* Check circle — top left */
+  .note-check {
+    position: absolute; top: 5px; left: 6px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.62rem; color: transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    z-index: 20;
+  }
+  .note-check:hover { border-color: rgba(0,0,0,0.55); }
+  .note.done-note .note-check { background: #16a34a; border-color: #15803d; color: white; }
+  .note.done-note .note-body { text-decoration: line-through; opacity: 0.5; }
+  .note-body { display: block; }
+
+  /* Delete X — top right */
+  .note-delete {
+    position: absolute; top: 4px; right: 5px;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem; font-weight: 700;
+    color: rgba(0,0,0,0.3);
+    cursor: pointer; border-radius: 50%;
+    transition: background 0.12s, color 0.12s;
+    z-index: 20;
+  }
+  .note-delete:hover { background: rgba(0,0,0,0.15); color: #c0392b; }
+
+  /* ── MOVE HANDLE — bottom right corner dot ── */
+  .note-move-handle {
+    position: absolute; bottom: 4px; right: 5px;
+    width: 16px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    border-radius: 50%;
+    transition: background 0.12s;
+  }
+  .note-move-handle::before {
+    content: '⠿';
+    font-size: 0.72rem;
+    color: rgba(0,0,0,0.28);
+    line-height: 1;
+  }
+  .note-move-handle:hover { background: rgba(0,0,0,0.1); }
+  .note.move-mode .note-move-handle { background: rgba(0,0,0,0.18); }
+  .note.move-mode .note-move-handle::before { color: rgba(0,0,0,0.6); }
+
+  /* ── MOVE ARROWS ── */
+  .note-arrows {
+    display: none;
+    pointer-events: none;
+  }
+  .note.move-mode .note-arrows { display: block; }
+
+  .move-arrow {
+    position: absolute;
+    width: 26px; height: 26px;
+    background: rgba(0,0,0,0.62);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    pointer-events: all;
+    z-index: 200;
+    transition: background 0.12s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .move-arrow:hover { background: rgba(0,0,0,0.88); transform: scale(1.18); }
+  .move-arrow:active { transform: scale(0.95); }
+
+  /* Arrow positions relative to note */
+  .arrow-up    { top: -16px; left: 50%; transform: translateX(-50%); }
+  .arrow-down  { bottom: -16px; left: 50%; transform: translateX(-50%); }
+  .arrow-left  { left: -16px; top: 50%; transform: translateY(-50%); }
+  .arrow-right { right: -16px; top: 50%; transform: translateY(-50%); }
+
+  .arrow-up:hover    { transform: translateX(-50%) scale(1.18); }
+  .arrow-down:hover  { transform: translateX(-50%) scale(1.18); }
+  .arrow-left:hover  { transform: translateY(-50%) scale(1.18); }
+  .arrow-right:hover { transform: translateY(-50%) scale(1.18); }
+
+  /* Note in move mode gets a ring */
+  .note.move-mode {
+    outline: 2.5px dashed rgba(0,0,0,0.45);
+    outline-offset: 3px;
+    z-index: 50;
+    transform: rotate(0deg) !important;
+  }
+
+  /* Note colors */
+  .yellow { background: var(--note-yellow); }
+  .yellow::before { background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b); }
+  .pink { background: var(--note-pink); }
+  .pink::before { background: radial-gradient(circle at 35% 35%, #a78bfa, #6d28d9); }
+  .blue { background: var(--note-blue); }
+  .blue::before { background: radial-gradient(circle at 35% 35%, #4ade80, #15803d); }
+  .green { background: var(--note-green); }
+  .green::before { background: radial-gradient(circle at 35% 35%, #38bdf8, #0284c7); }
+  .orange { background: var(--note-orange); }
+  .orange::before { background: radial-gradient(circle at 35% 35%, #f87171, #dc2626); }
+  .purple { background: var(--note-purple); }
+  .purple::before { background: radial-gradient(circle at 35% 35%, #fcd34d, #b45309); }
+  .teal { background: var(--note-teal); }
+  .teal::before { background: radial-gradient(circle at 35% 35%, #c4b5fd, #7c3aed); }
+  .red { background: var(--note-red); }
+  .red::before { background: radial-gradient(circle at 35% 35%, #93c5fd, #1d4ed8); }
+
+  /* AUTOSAVE TOAST */
+  #save-toast {
+    position: fixed; bottom: 18px; right: 22px;
+    background: rgba(22,163,74,0.92);
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 1.05rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #save-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MODAL */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: #fef9c3; border-radius: 3px;
+    padding: 26px 28px 22px; width: 340px;
+    box-shadow: 4px 8px 32px rgba(0,0,0,0.5);
+    transform: rotate(-0.5deg);
+  }
+  .modal h2 { font-size: 1.5rem; margin-bottom: 14px; color: #292524; }
+  .modal textarea {
+    width: 100%; min-height: 80px;
+    border: none; border-bottom: 2px solid #a8a29e;
+    background: transparent;
+    font-family: 'Caveat', cursive; font-size: 1.1rem; color: #1c1917;
+    resize: none; outline: none; padding: 4px 0; line-height: 1.5;
+  }
+  .modal .color-pick { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+  .color-swatch {
+    width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+    border: 3px solid transparent; transition: transform 0.1s, border-color 0.1s;
+  }
+  .color-swatch:hover { transform: scale(1.2); }
+  .color-swatch.selected { border-color: #292524; transform: scale(1.15); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+  .btn {
+    font-family: 'Caveat', cursive; font-size: 1.05rem;
+    padding: 5px 18px; border-radius: 3px; border: none; cursor: pointer; transition: transform 0.1s;
+  }
+  .btn:hover { transform: scale(1.05); }
+  .btn-add { background: #292524; color: white; }
+  .btn-cancel { background: rgba(0,0,0,0.1); color: #44403c; }
+</style>
+</head>
+<body>
+
+<h1>📌 The Board</h1>
+
+<div class="drop-zone-wrapper">
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-input" accept=".txt">
+    <div class="drop-icon">📄</div>
+    <div class="drop-text">
+      <strong>Drop a .txt file — each line becomes a sticky note (lands on Monday AM)</strong>
+      <span>Empty lines skipped. Use the ⠿ handle on each card to move it with arrows.</span>
+    </div>
+    <div class="drop-actions" onclick="event.stopPropagation()">
+      <button class="pill-btn reload" id="reload-btn" onclick="reloadFromFile()" style="display:none">↺ Reload file</button>
+      <button class="pill-btn clear" id="clear-btn" onclick="clearAll()" style="display:none">✕ Clear board</button>
+    </div>
+  </div>
+  <div class="file-status" id="file-status"></div>
+</div>
+
+<div class="board">
+  <div class="week-grid" id="week-grid"></div>
+</div>
+
+<div id="save-toast">✓ saved</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <h2 id="modal-title">New sticky 📝</h2>
+    <textarea id="note-text" placeholder="Write something..."></textarea>
+    <div class="color-pick" id="color-pick"></div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal()">nope</button>
+      <button class="btn btn-add" onclick="addNote()">stick it!</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const COLORS = ['yellow','pink','blue','green','orange','purple','teal','red'];
+  const ROTATIONS = [-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3];
+  const COLOR_MAP = {
+    yellow:'#fef08a', pink:'#f9a8d4', blue:'#93c5fd', green:'#86efac',
+    orange:'#fdba74', purple:'#c4b5fd', teal:'#5eead4', red:'#fca5a5'
+  };
+  const HEADER_ROTS = [-1.2, 0.8, -0.5, 1.0, -0.9, 0.6, -0.7];
+  const ZONES = ['top','bottom'];
+
+  let notes = JSON.parse(localStorage.getItem('weekNotes') || '[]');
+  let currentDay = 'Monday';
+  let currentZone = 'top';
+  let selectedColor = 'yellow';
+  let noteCounter = Date.now();
+  let lastFileText = localStorage.getItem('lastFileText') || null;
+  let lastFileName = localStorage.getItem('lastFileName') || null;
+
+  // track which note is in move mode
+  let movingNoteId = null;
+
+  // ── BUILD COLUMNS ──
+  const grid = document.getElementById('week-grid');
+  DAYS.forEach((day, di) => {
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    col.style.setProperty('--hrot', HEADER_ROTS[di] + 'deg');
+    col.innerHTML = `
+      <div class="day-header"><span>${day}</span></div>
+      <div class="notes-top" id="top-${day}" data-day="${day}" data-zone="top"></div>
+      <div class="day-divider"></div>
+      <div class="notes-bottom" id="bot-${day}" data-day="${day}" data-zone="bottom"></div>
+      <div class="add-btns">
+        <button class="add-btn" onclick="openModal('${day}','top')">+ AM</button>
+        <button class="add-btn" onclick="openModal('${day}','bottom')">+ PM</button>
+      </div>
+    `;
+    grid.appendChild(col);
+  });
+
+  // ── COLOR SWATCHES ──
+  const colorPick = document.getElementById('color-pick');
+  COLORS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (c === selectedColor ? ' selected' : '');
+    sw.style.background = COLOR_MAP[c];
+    sw.onclick = () => {
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      sw.classList.add('selected');
+      selectedColor = c;
+    };
+    colorPick.appendChild(sw);
+  });
+
+  let saveToastTimer = null;
+  function save() {
+    // Stamp an explicit order index on every note before saving
+    // so position within each zone is unambiguous on reload
+    normalizeOrder();
+    localStorage.setItem('weekNotes', JSON.stringify(notes));
+    // Flash the saved toast
+    const toast = document.getElementById('save-toast');
+    toast.classList.add('show');
+    clearTimeout(saveToastTimer);
+    saveToastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+  }
+
+  // Assign .order values based on current array position within each day+zone
+  function normalizeOrder() {
+    const counters = {};
+    notes.forEach(n => {
+      const key = n.day + '|' + n.zone;
+      if (counters[key] === undefined) counters[key] = 0;
+      n.order = counters[key]++;
+    });
+  }
+
+  // On load, sort notes by their saved order so positions restore correctly
+  function sortByOrder() {
+    notes.sort((a, b) => {
+      const ak = DAYS.indexOf(a.day)*10 + (a.zone==='top'?0:1);
+      const bk = DAYS.indexOf(b.day)*10 + (b.zone==='top'?0:1);
+      if (ak !== bk) return ak - bk;
+      return (a.order||0) - (b.order||0);
+    });
+  }
+
+  function randItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function escapeHtml(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+  function makeNote(text, day, zone, color, rot, tape) {
+    return {
+      id: 'n' + (noteCounter++),
+      text, day: day||'Monday', zone: zone||'top',
+      color: color||randItem(COLORS),
+      rot: rot!==undefined ? rot : randItem(ROTATIONS),
+      tape: tape!==undefined ? tape : Math.random()<0.25,
+      done: false, fromFile: false, order: 9999
+    };
+  }
+
+  // Safety net: save on tab close / navigation
+  window.addEventListener('beforeunload', () => {
+    normalizeOrder();
+    localStorage.setItem('weekNotes', JSON.stringify(notes));
+  });
+
+  // ══════════════════════════════
+  // MOVE LOGIC
+  // ══════════════════════════════
+
+  // Returns flat ordered list of all zone slots: [{day, zone}...]
+  // Order: Mon-top, Mon-bottom, Tue-top, Tue-bottom ... Sun-bottom
+  // "Up" = earlier in zone, or to previous zone; "Down" = later or next zone
+  // "Left" = same zone/position in previous day; "Right" = next day
+
+  function getZoneNotes(day, zone) {
+    return notes.filter(n => n.day === day && n.zone === zone);
+  }
+
+  function moveNote(id, dir) {
+    const note = notes.find(n => n.id === id);
+    if (!note) return;
+
+    const dayIdx = DAYS.indexOf(note.day);
+    const zoneIdx = ZONES.indexOf(note.zone); // 0=top, 1=bottom
+
+    const zoneNotes = getZoneNotes(note.day, note.zone);
+    const posInZone = zoneNotes.findIndex(n => n.id === id);
+
+    if (dir === 'up') {
+      if (posInZone > 0) {
+        // swap with previous note in same zone
+        const other = zoneNotes[posInZone - 1];
+        const ni = notes.indexOf(note);
+        const oi = notes.indexOf(other);
+        notes[ni] = other;
+        notes[oi] = note;
+      } else if (zoneIdx === 1) {
+        // move from bottom zone to top zone (append at end of top)
+        note.zone = 'top';
+      } else if (dayIdx > 0) {
+        // move to bottom of previous day's bottom zone
+        note.day = DAYS[dayIdx - 1];
+        note.zone = 'bottom';
+      }
+    } else if (dir === 'down') {
+      if (posInZone < zoneNotes.length - 1) {
+        // swap with next note in same zone
+        const other = zoneNotes[posInZone + 1];
+        const ni = notes.indexOf(note);
+        const oi = notes.indexOf(other);
+        notes[ni] = other;
+        notes[oi] = note;
+      } else if (zoneIdx === 0) {
+        // move from top zone to bottom zone
+        note.zone = 'bottom';
+      } else if (dayIdx < DAYS.length - 1) {
+        // move to top of next day's top zone
+        note.day = DAYS[dayIdx + 1];
+        note.zone = 'top';
+      }
+    } else if (dir === 'left') {
+      if (dayIdx > 0) {
+        note.day = DAYS[dayIdx - 1];
+        // keep same zone
+      }
+    } else if (dir === 'right') {
+      if (dayIdx < DAYS.length - 1) {
+        note.day = DAYS[dayIdx + 1];
+        // keep same zone
+      }
+    }
+
+    save();
+    renderAll();
+
+    // Re-enter move mode on the same note after re-render
+    requestAnimationFrame(() => enterMoveMode(id));
+  }
+
+  function enterMoveMode(id) {
+    // Exit any existing move mode first
+    exitAllMoveModes();
+    movingNoteId = id;
+    const el = document.querySelector(`.note[data-id="${id}"]`);
+    if (!el) return;
+    el.classList.add('move-mode');
+    const arrows = el.querySelector('.note-arrows');
+    if (arrows) arrows.style.display = 'block';
+  }
+
+  function exitMoveMode(id) {
+    movingNoteId = null;
+    const el = document.querySelector(`.note[data-id="${id}"]`);
+    if (!el) return;
+    el.classList.remove('move-mode');
+    const arrows = el.querySelector('.note-arrows');
+    if (arrows) arrows.style.display = 'none';
+  }
+
+  function exitAllMoveModes() {
+    document.querySelectorAll('.note.move-mode').forEach(el => {
+      el.classList.remove('move-mode');
+      const arrows = el.querySelector('.note-arrows');
+      if (arrows) arrows.style.display = 'none';
+    });
+    movingNoteId = null;
+  }
+
+  // ── RENDER ──
+  function renderNoteEl(note) {
+    const el = document.createElement('div');
+    el.className = 'note ' + note.color
+      + (note.tape ? ' tape' : '')
+      + (note.done ? ' done-note' : '');
+    el.style.setProperty('--rot', note.rot + 'deg');
+    el.dataset.id = note.id;
+
+    // Check circle
+    const chk = document.createElement('div');
+    chk.className = 'note-check';
+    chk.title = 'Mark done';
+    chk.innerHTML = note.done ? '✓' : '';
+    chk.addEventListener('click', e => {
+      e.stopPropagation();
+      const n = notes.find(n => n.id === note.id);
+      if (n) { n.done = !n.done; save(); renderAll(); }
+    });
+
+    // Delete X
+    const del = document.createElement('div');
+    del.className = 'note-delete';
+    del.title = 'Delete';
+    del.innerHTML = '✕';
+    del.addEventListener('click', e => {
+      e.stopPropagation();
+      deleteNote(note.id);
+    });
+
+    // Text
+    const body = document.createElement('span');
+    body.className = 'note-body';
+    body.innerHTML = escapeHtml(note.text);
+
+    // Fold
+    const fold = document.createElement('div');
+    fold.className = 'fold';
+
+    // Move handle (bottom-right dot)
+    const handle = document.createElement('div');
+    handle.className = 'note-move-handle';
+    handle.title = 'Move this note';
+    handle.addEventListener('click', e => {
+      e.stopPropagation();
+      if (movingNoteId === note.id) {
+        exitMoveMode(note.id);
+      } else {
+        enterMoveMode(note.id);
+      }
+    });
+
+    // Arrow container
+    const arrows = document.createElement('div');
+    arrows.className = 'note-arrows';
+    arrows.style.display = 'none';
+
+    const dirs = [
+      { dir:'up',    cls:'arrow-up',    label:'▲' },
+      { dir:'down',  cls:'arrow-down',  label:'▼' },
+      { dir:'left',  cls:'arrow-left',  label:'◀' },
+      { dir:'right', cls:'arrow-right', label:'▶' },
+    ];
+    dirs.forEach(({ dir, cls, label }) => {
+      const btn = document.createElement('div');
+      btn.className = 'move-arrow ' + cls;
+      btn.innerHTML = label;
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        moveNote(note.id, dir);
+      });
+      arrows.appendChild(btn);
+    });
+
+    el.appendChild(chk);
+    el.appendChild(del);
+    el.appendChild(body);
+    el.appendChild(fold);
+    el.appendChild(handle);
+    el.appendChild(arrows);
+
+    return el;
+  }
+
+  function renderAll() {
+    const wasMoveId = movingNoteId;
+    movingNoteId = null;
+
+    DAYS.forEach(day => {
+      ZONES.forEach(zone => {
+        const area = document.getElementById((zone==='top'?'top-':'bot-') + day);
+        area.innerHTML = '';
+        notes.filter(n => n.day===day && n.zone===zone).forEach((n, i) => {
+          const el = renderNoteEl(n);
+          el.style.animationDelay = (i*28)+'ms';
+          area.appendChild(el);
+        });
+      });
+    });
+
+    // Restore move mode if one was active
+    if (wasMoveId) {
+      requestAnimationFrame(() => enterMoveMode(wasMoveId));
+    }
+  }
+
+  // Click outside a note in move mode → exit
+  document.addEventListener('click', e => {
+    if (movingNoteId && !e.target.closest('.note')) {
+      exitAllMoveModes();
+    }
+  });
+
+  // ── DELETE ──
+  function deleteNote(id) {
+    if (movingNoteId === id) exitAllMoveModes();
+    const note = notes.find(n => n.id === id);
+    if (note && note.fromFile && lastFileText) {
+      const lines = lastFileText.split('\n');
+      lastFileText = lines.filter(l => l.trim() !== note.text.trim()).join('\n');
+      localStorage.setItem('lastFileText', lastFileText);
+    }
+    notes = notes.filter(n => n.id !== id);
+    save(); renderAll();
+  }
+
+  // ── FILE IMPORT ──
+  function importFromText(text, fileName) {
+    const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+    if (!lines.length) { setStatus('No readable lines found.','#fdba74'); return; }
+    notes = notes.filter(n => !n.fromFile);
+    lines.forEach(line => {
+      const n = makeNote(line,'Monday','top');
+      n.fromFile = true;
+      notes.push(n);
+    });
+    save(); renderAll(); updateFileButtons(true);
+    setStatus('Loaded "'+fileName+'" — '+lines.length+' notes on Monday AM','#86efac');
+  }
+
+  function reloadFromFile() { if (lastFileText) importFromText(lastFileText, lastFileName); }
+
+  function clearAll() {
+    if (!confirm('Clear the whole board?')) return;
+    notes=[]; lastFileText=null; lastFileName=null;
+    localStorage.removeItem('lastFileText'); localStorage.removeItem('lastFileName');
+    save(); renderAll(); updateFileButtons(false);
+    setStatus('Board cleared.','#f9a8d4');
+  }
+
+  function updateFileButtons(show) {
+    document.getElementById('reload-btn').style.display = show?'':'none';
+    document.getElementById('clear-btn').style.display = show?'':'none';
+  }
+
+  function setStatus(msg,color) {
+    const el = document.getElementById('file-status');
+    el.textContent=msg; el.style.color=color||'#f5e6d3';
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>{ el.textContent=''; },7000);
+  }
+
+  const fileInput = document.getElementById('file-input');
+  fileInput.addEventListener('change', e => {
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      lastFileText=ev.target.result; lastFileName=file.name;
+      localStorage.setItem('lastFileText',lastFileText);
+      localStorage.setItem('lastFileName',lastFileName);
+      importFromText(lastFileText,lastFileName);
+    };
+    reader.readAsText(file); fileInput.value='';
+  });
+
+  const dropZone=document.getElementById('drop-zone');
+  dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-file-over');});
+  dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-file-over'));
+  dropZone.addEventListener('drop',e=>{
+    e.preventDefault(); dropZone.classList.remove('drag-file-over');
+    const file=e.dataTransfer.files[0];
+    if(!file||!file.name.endsWith('.txt')){setStatus('Please drop a .txt file.','#fdba74');return;}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      lastFileText=ev.target.result; lastFileName=file.name;
+      localStorage.setItem('lastFileText',lastFileText);
+      localStorage.setItem('lastFileName',lastFileName);
+      importFromText(lastFileText,lastFileName);
+    };
+    reader.readAsText(file);
+  });
+
+  // ── MANUAL ADD ──
+  function openModal(day,zone) {
+    currentDay=day; currentZone=zone;
+    document.getElementById('note-text').value='';
+    document.getElementById('modal-title').textContent=(zone==='top'?'🌅 AM — ':'🌇 PM — ')+day;
+    document.getElementById('modal').classList.add('open');
+    setTimeout(()=>document.getElementById('note-text').focus(),50);
+  }
+  function closeModal(){document.getElementById('modal').classList.remove('open');}
+  function addNote(){
+    const text=document.getElementById('note-text').value.trim();
+    if(!text) return;
+    notes.push(makeNote(text,currentDay,currentZone,selectedColor));
+    save(); renderAll(); closeModal();
+  }
+  document.getElementById('note-text').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&e.metaKey) addNote();
+  });
+  document.getElementById('modal').onclick=function(e){
+    if(e.target===this) closeModal();
+  };
+
+  // ── INIT ──
+  sortByOrder(); // restore saved positions on load
+  if(lastFileText) updateFileButtons(true);
+  if(notes.length===0&&!lastFileText){
+    const seed=makeNote('Drop a .txt file above — each line = a sticky!','Monday','top','yellow',-1,false);
+    notes.push(seed); save();
+  }
+  renderAll();
+</script>
+</body>
+</html>
