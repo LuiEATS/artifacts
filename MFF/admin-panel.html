@@ -281,7 +281,7 @@
   .act-edit    { color: var(--gold);  border-color: var(--border);         background: transparent; }
   .act-edit:hover    { border-color: var(--gold); background: rgba(184,150,62,0.08); }
 
-  /* ─── CUSTOM ORDERS TABLE ─── */
+  /* ─── CUSTOM window.ORDERS TABLE ─── */
   .order-status-pill {
     font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
     padding: 0.25rem 0.65rem; border-radius: 100px; font-weight: 500;
@@ -292,7 +292,7 @@
   .order-status-pill.refunded { background: rgba(224,85,85,0.12);  color: var(--red);   border: 1px solid rgba(224,85,85,0.3); }
   .price-tag { color: var(--gold); font-weight: 500; }
 
-  /* ─── PUBLISHED GRID ─── */
+  /* ─── window.PUBLISHED GRID ─── */
   .pub-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1rem;
@@ -464,7 +464,7 @@
     </div>
   </div>
 
-  <!-- SUBMISSIONS -->
+  <!-- window.SUBMISSIONS -->
   <div id="admin-submissions" class="page-admin">
     <div class="page-header">
       <div>
@@ -505,7 +505,7 @@
     </table>
   </div>
 
-  <!-- CUSTOM ORDERS -->
+  <!-- CUSTOM window.ORDERS -->
   <div id="admin-orders" class="page-admin">
     <div class="page-header">
       <div>
@@ -541,7 +541,7 @@
     </table>
   </div>
 
-  <!-- PUBLISHED -->
+  <!-- window.PUBLISHED -->
   <div id="admin-published" class="page-admin">
     <div class="page-header">
       <div>
@@ -637,7 +637,9 @@ window.sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ─── STATE ───
 const PALETTES = ['#1e1a16,#2a2016','#16191e,#0f1a22','#1a1620,#22162a','#1e1916,#281e10'];
-let SUBMISSIONS = [], ORDERS = [], PUBLISHED = [];
+window.window.SUBMISSIONS = [];
+window.window.ORDERS = [];
+window.window.PUBLISHED = [];
 let ALL_TAGS    = ['candid','studio','outdoor','editorial','bw','ai','video','artistic','closeup','solo'];
 let activeOrderId = null;
 let activeEditId  = null;
@@ -652,9 +654,9 @@ async function loadAll() {
     sb.from('orders').select('*').order('created_at', { ascending: false }),
     sb.from('posts').select('*').order('created_at', { ascending: false }),
   ]);
-  SUBMISSIONS = (subs.data   || []).map(s => ({ ...s, date: s.created_at?.slice(0,10) }));
-  ORDERS      = (orders.data || []).map(o => ({ ...o, date: o.created_at?.slice(0,10), pkg: o.package }));
-  PUBLISHED   = posts.data   || [];
+  window.window.SUBMISSIONS = (subs.data   || []).map(s => ({ ...s, date: s.created_at?.slice(0,10) }));
+  window.window.ORDERS      = (orders.data || []).map(o => ({ ...o, date: o.created_at?.slice(0,10), pkg: o.package }));
+  window.window.PUBLISHED   = posts.data   || [];
   renderDashboard(); renderSubs(); renderOrders(); renderPublished(); renderTags();
 }
 
@@ -692,25 +694,25 @@ function showAdmin(page) {
 // DASHBOARD
 // ──────────────────────────────────────────────
 function renderDashboard() {
-  const pending   = SUBMISSIONS.filter(s=>s.status==='pending' && !s.archived).length;
-  const newOrders = ORDERS.filter(o=>o.status==='new' && !o.archived).length;
+  const pending   = window.SUBMISSIONS.filter(s=>s.status==='pending' && !s.archived).length;
+  const newOrders = window.ORDERS.filter(o=>o.status==='new' && !o.archived).length;
   document.getElementById('statPending').textContent   = pending;
   document.getElementById('statOrders').textContent    = newOrders;
-  document.getElementById('statPublished').textContent = PUBLISHED.filter(p=>!p.archived).length;
+  document.getElementById('statPublished').textContent = window.PUBLISHED.filter(p=>!p.archived).length;
   document.getElementById('pendingBadge').textContent  = pending;
   document.getElementById('orderBadge').textContent    = newOrders;
   const feed = [
-    ...SUBMISSIONS.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>📬 Submission — <strong>${s.title}</strong></span><span style="font-size:0.65rem;color:var(--text-dim)">${s.date}</span></div>`),
-    ...ORDERS.slice(0,2).map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>💳 Order ${o.id} — <span style="color:var(--gold)">$${o.price}</span></span><span style="font-size:0.65rem;color:var(--text-dim)">${o.date}</span></div>`),
+    ...window.SUBMISSIONS.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>📬 Submission — <strong>${s.title}</strong></span><span style="font-size:0.65rem;color:var(--text-dim)">${s.date}</span></div>`),
+    ...window.ORDERS.slice(0,2).map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>💳 Order ${o.id} — <span style="color:var(--gold)">$${o.price}</span></span><span style="font-size:0.65rem;color:var(--text-dim)">${o.date}</span></div>`),
   ];
   document.getElementById('activityFeed').innerHTML = feed.join('');
 }
 
 // ──────────────────────────────────────────────
-// SUBMISSIONS
+// window.SUBMISSIONS
 // ──────────────────────────────────────────────
 function renderSubs() {
-  const data = SUBMISSIONS.filter(s=>{
+  const data = window.SUBMISSIONS.filter(s=>{
     const q = subFilter.q.toLowerCase();
     const matchQ = !q || s.title.toLowerCase().includes(q) || s.email.includes(q);
     const matchS = subFilter.status==='all'
@@ -786,7 +788,7 @@ async function setSubStatus(id, status) {
   await loadAll();
 }
 async function toggleArchiveSub(id) {
-  const s = SUBMISSIONS.find(x=>x.id===id);
+  const s = window.SUBMISSIONS.find(x=>x.id===id);
   if (!s) return;
   s.archived = !s.archived;
   await sb.from('submissions').update({ archived: s.archived }).eq('id', id);
@@ -796,18 +798,18 @@ async function toggleArchiveSub(id) {
 async function deleteSub(id) {
   if (!confirm('Delete this submission permanently?')) return;
   await sb.from('submissions').delete().eq('id', id);
-  const i = SUBMISSIONS.findIndex(x=>x.id===id);
-  if (i>-1) { const t=SUBMISSIONS[i].title; SUBMISSIONS.splice(i,1); renderSubs(); renderDashboard(); showToast(`Deleted "${t}"`); }
+  const i = window.SUBMISSIONS.findIndex(x=>x.id===id);
+  if (i>-1) { const t=window.SUBMISSIONS[i].title; window.SUBMISSIONS.splice(i,1); renderSubs(); renderDashboard(); showToast(`Deleted "${t}"`); }
 }
 function filterSubs(q)      { subFilter.q=q; renderSubs(); }
 function filterSubStatus(v) { subFilter.status=v; renderSubs(); }
 function filterSubType(v)   { subFilter.type=v; renderSubs(); }
 
 // ──────────────────────────────────────────────
-// ORDERS
+// window.ORDERS
 // ──────────────────────────────────────────────
 function renderOrders() {
-  const data = ORDERS.filter(o=>{
+  const data = window.ORDERS.filter(o=>{
     const q = ordFilter.q.toLowerCase();
     const matchQ = !q || o.email.includes(q) || o.request.toLowerCase().includes(q) || o.id.includes(q);
     const matchS = ordFilter.status==='all'
@@ -841,7 +843,7 @@ function renderOrders() {
   </tr>`).join('');
 }
 function openOrderDetail(id) {
-  const o = ORDERS.find(x=>x.id===id);
+  const o = window.ORDERS.find(x=>x.id===id);
   if (!o) return;
   activeOrderId = id;
   document.getElementById('orderDetail').innerHTML = `
@@ -861,11 +863,11 @@ function openOrderDetail(id) {
 }
 async function updateOrderStatus(status) {
   await sb.from('orders').update({ status }).eq('id', activeOrderId);
-  const o = ORDERS.find(x=>x.id===activeOrderId);
+  const o = window.ORDERS.find(x=>x.id===activeOrderId);
   if (o) { o.status=status; renderOrders(); renderDashboard(); document.getElementById('orderModal').classList.remove('open'); showToast(`Order ${activeOrderId} → ${status}`); }
 }
 async function toggleArchiveOrder(id) {
-  const o = ORDERS.find(x=>x.id===id);
+  const o = window.ORDERS.find(x=>x.id===id);
   if (!o) return;
   o.archived = !o.archived;
   await sb.from('orders').update({ archived: o.archived }).eq('id', id);
@@ -875,25 +877,25 @@ async function toggleArchiveOrder(id) {
 async function deleteOrder(id) {
   if (!confirm('Delete this order?')) return;
   await sb.from('orders').delete().eq('id', id);
-  const i = ORDERS.findIndex(x=>x.id===id);
-  if (i>-1) { ORDERS.splice(i,1); renderOrders(); renderDashboard(); showToast(`Deleted ${id}`); }
+  const i = window.ORDERS.findIndex(x=>x.id===id);
+  if (i>-1) { window.ORDERS.splice(i,1); renderOrders(); renderDashboard(); showToast(`Deleted ${id}`); }
 }
 function filterOrders(q)      { ordFilter.q=q; renderOrders(); }
 function filterOrderStatus(v) { ordFilter.status=v; renderOrders(); }
 function closeOrderModal(e)   { if(e.target===document.getElementById('orderModal')) document.getElementById('orderModal').classList.remove('open'); }
 
 // ──────────────────────────────────────────────
-// PUBLISHED
+// window.PUBLISHED
 // ──────────────────────────────────────────────
 function renderPublished() {
-  const allTags = [...new Set(PUBLISHED.flatMap(p=>p.tags||[]))].sort();
+  const allTags = [...new Set(window.PUBLISHED.flatMap(p=>p.tags||[]))].sort();
   const sel = document.getElementById('pubTagFilter');
   sel.innerHTML = '<option value="all">All (active)</option>'
     + allTags.map(t=>`<option value="${t}">${t}</option>`).join('')
     + '<option value="__archived__">📦 Archived</option>';
 
   const showArchived = pubFilter.tag === '__archived__';
-  const data = PUBLISHED.filter(p=>{
+  const data = window.PUBLISHED.filter(p=>{
     const q = pubFilter.q.toLowerCase();
     const matchQ = !q || p.title.toLowerCase().includes(q);
     const matchT = showArchived
@@ -927,7 +929,7 @@ function renderPublished() {
   </div>`).join('') || '<div style="color:var(--text-dim);font-size:0.85rem;padding:2rem 0">No posts found.</div>';
 }
 async function toggleArchivePub(id) {
-  const p = PUBLISHED.find(x=>x.id===id);
+  const p = window.PUBLISHED.find(x=>x.id===id);
   if (!p) return;
   p.archived = !p.archived;
   await sb.from('posts').update({ archived: p.archived }).eq('id', id);
@@ -937,8 +939,8 @@ async function toggleArchivePub(id) {
 async function deletePub(id) {
   if (!confirm('Remove this post from the gallery?')) return;
   await sb.from('posts').delete().eq('id', id);
-  const i = PUBLISHED.findIndex(x=>x.id===id);
-  if (i>-1) { const t=PUBLISHED[i].title; PUBLISHED.splice(i,1); renderPublished(); renderDashboard(); showToast(`Removed "${t}"`); }
+  const i = window.PUBLISHED.findIndex(x=>x.id===id);
+  if (i>-1) { const t=window.PUBLISHED[i].title; window.PUBLISHED.splice(i,1); renderPublished(); renderDashboard(); showToast(`Removed "${t}"`); }
 }
 function filterPub(q)    { pubFilter.q=q; renderPublished(); }
 function filterPubTag(v) { pubFilter.tag=v; renderPublished(); }
@@ -972,7 +974,7 @@ function deleteTag(t) {
 // ──────────────────────────────────────────────
 function openEdit(source, id) {
   activeEditId = { source, id };
-  const list = source==='sub' ? SUBMISSIONS : PUBLISHED;
+  const list = source==='sub' ? window.SUBMISSIONS : window.PUBLISHED;
   const item = list.find(x=>x.id===id);
   if (!item) return;
   document.getElementById('editModalTitle').textContent = source==='sub' ? 'Edit Submission' : 'Edit Post';
@@ -984,7 +986,7 @@ function openEdit(source, id) {
 }
 async function saveEdit() {
   const { source, id } = activeEditId;
-  const list  = source==='sub' ? SUBMISSIONS : PUBLISHED;
+  const list  = source==='sub' ? window.SUBMISSIONS : window.PUBLISHED;
   const table = source==='sub' ? 'submissions' : 'posts';
   const item  = list.find(x=>x.id===id);
   if (!item) return;
@@ -1034,26 +1036,26 @@ function showAdmin(page) {
 // DASHBOARD
 // ──────────────────────────────────────────────
 function renderDashboard() {
-  const pending = SUBMISSIONS.filter(s=>s.status==='pending').length;
-  const newOrders = ORDERS.filter(o=>o.status==='new').length;
+  const pending = window.SUBMISSIONS.filter(s=>s.status==='pending').length;
+  const newOrders = window.ORDERS.filter(o=>o.status==='new').length;
   document.getElementById('statPending').textContent = pending;
   document.getElementById('statOrders').textContent  = newOrders;
-  document.getElementById('statPublished').textContent = PUBLISHED.length;
+  document.getElementById('statPublished').textContent = window.PUBLISHED.length;
   document.getElementById('pendingBadge').textContent = pending;
   document.getElementById('orderBadge').textContent   = newOrders;
 
   const feed = [
-    ...SUBMISSIONS.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>📬 Submission — <strong>${s.title}</strong></span><span style="font-size:0.65rem;color:var(--text-dim)">${s.date}</span></div>`),
-    ...ORDERS.slice(0,2).map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>💳 Order ${o.id} — <span style="color:var(--gold)">$${o.price}</span></span><span style="font-size:0.65rem;color:var(--text-dim)">${o.date}</span></div>`),
+    ...window.SUBMISSIONS.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>📬 Submission — <strong>${s.title}</strong></span><span style="font-size:0.65rem;color:var(--text-dim)">${s.date}</span></div>`),
+    ...window.ORDERS.slice(0,2).map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem"><span>💳 Order ${o.id} — <span style="color:var(--gold)">$${o.price}</span></span><span style="font-size:0.65rem;color:var(--text-dim)">${o.date}</span></div>`),
   ];
   document.getElementById('activityFeed').innerHTML = feed.join('');
 }
 
 // ──────────────────────────────────────────────
-// SUBMISSIONS
+// window.SUBMISSIONS
 // ──────────────────────────────────────────────
 function renderSubs() {
-  const data = SUBMISSIONS.filter(s=>{
+  const data = window.SUBMISSIONS.filter(s=>{
     const q = subFilter.q.toLowerCase();
     const matchQ = !q || s.title.toLowerCase().includes(q) || s.email.includes(q);
     const matchS = subFilter.status==='all'
@@ -1100,11 +1102,11 @@ function renderSubs() {
   </tr>`).join('');
 }
 function setSubStatus(id, status) {
-  const s = SUBMISSIONS.find(x=>x.id===id);
+  const s = window.SUBMISSIONS.find(x=>x.id===id);
   if (s) { s.status = status; renderSubs(); renderDashboard(); showToast(`✦ "${s.title}" marked as ${status}`); }
 }
 function toggleArchiveSub(id) {
-  const s = SUBMISSIONS.find(x=>x.id===id);
+  const s = window.SUBMISSIONS.find(x=>x.id===id);
   if (!s) return;
   s.archived = !s.archived;
   renderSubs(); renderDashboard();
@@ -1112,18 +1114,18 @@ function toggleArchiveSub(id) {
 }
 function deleteSub(id) {
   if (!confirm('Delete this submission permanently?')) return;
-  const i = SUBMISSIONS.findIndex(x=>x.id===id);
-  if (i>-1) { const t = SUBMISSIONS[i].title; SUBMISSIONS.splice(i,1); renderSubs(); renderDashboard(); showToast(`Deleted "${t}"`); }
+  const i = window.SUBMISSIONS.findIndex(x=>x.id===id);
+  if (i>-1) { const t = window.SUBMISSIONS[i].title; window.SUBMISSIONS.splice(i,1); renderSubs(); renderDashboard(); showToast(`Deleted "${t}"`); }
 }
 function filterSubs(q)      { subFilter.q=q; renderSubs(); }
 function filterSubStatus(v) { subFilter.status=v; renderSubs(); }
 function filterSubType(v)   { subFilter.type=v; renderSubs(); }
 
 // ──────────────────────────────────────────────
-// ORDERS
+// window.ORDERS
 // ──────────────────────────────────────────────
 function renderOrders() {
-  const data = ORDERS.filter(o=>{
+  const data = window.ORDERS.filter(o=>{
     const q = ordFilter.q.toLowerCase();
     const matchQ = !q || o.email.includes(q) || o.request.toLowerCase().includes(q) || o.id.includes(q);
     const matchS = ordFilter.status==='all'
@@ -1157,14 +1159,14 @@ function renderOrders() {
   </tr>`).join('');
 }
 function toggleArchiveOrder(id) {
-  const o = ORDERS.find(x=>x.id===id);
+  const o = window.ORDERS.find(x=>x.id===id);
   if (!o) return;
   o.archived = !o.archived;
   renderOrders(); renderDashboard();
   showToast(o.archived ? `📦 Order ${id} archived` : `✦ Order ${id} unarchived`);
 }
 function openOrderDetail(id) {
-  const o = ORDERS.find(x=>x.id===id);
+  const o = window.ORDERS.find(x=>x.id===id);
   if (!o) return;
   activeOrderId = id;
   document.getElementById('orderDetail').innerHTML = `
@@ -1183,30 +1185,30 @@ function openOrderDetail(id) {
   document.getElementById('orderModal').classList.add('open');
 }
 function updateOrderStatus(status) {
-  const o = ORDERS.find(x=>x.id===activeOrderId);
+  const o = window.ORDERS.find(x=>x.id===activeOrderId);
   if (o) { o.status=status; renderOrders(); renderDashboard(); document.getElementById('orderModal').classList.remove('open'); showToast(`Order ${activeOrderId} → ${status}`); }
 }
 function deleteOrder(id) {
   if (!confirm('Delete this order?')) return;
-  const i = ORDERS.findIndex(x=>x.id===id);
-  if (i>-1) { ORDERS.splice(i,1); renderOrders(); renderDashboard(); showToast(`Deleted ${id}`); }
+  const i = window.ORDERS.findIndex(x=>x.id===id);
+  if (i>-1) { window.ORDERS.splice(i,1); renderOrders(); renderDashboard(); showToast(`Deleted ${id}`); }
 }
 function filterOrders(q)      { ordFilter.q=q; renderOrders(); }
 function filterOrderStatus(v) { ordFilter.status=v; renderOrders(); }
 function closeOrderModal(e)   { if(e.target===document.getElementById('orderModal')) document.getElementById('orderModal').classList.remove('open'); }
 
 // ──────────────────────────────────────────────
-// PUBLISHED
+// window.PUBLISHED
 // ──────────────────────────────────────────────
 function renderPublished() {
-  const allTags = [...new Set(PUBLISHED.flatMap(p=>p.tags))].sort();
+  const allTags = [...new Set(window.PUBLISHED.flatMap(p=>p.tags))].sort();
   const sel = document.getElementById('pubTagFilter');
   sel.innerHTML = '<option value="all">All (active)</option>'
     + allTags.map(t=>`<option value="${t}">${t}</option>`).join('')
     + '<option value="__archived__">📦 Archived</option>';
 
   const showArchived = pubFilter.tag === '__archived__';
-  const data = PUBLISHED.filter(p=>{
+  const data = window.PUBLISHED.filter(p=>{
     const q = pubFilter.q.toLowerCase();
     const matchQ = !q || p.title.toLowerCase().includes(q);
     const matchT = showArchived
@@ -1240,7 +1242,7 @@ function renderPublished() {
   </div>`).join('') || '<div style="color:var(--text-dim);font-size:0.85rem;padding:2rem 0">No posts found.</div>';
 }
 function toggleArchivePub(id) {
-  const p = PUBLISHED.find(x=>x.id===id);
+  const p = window.PUBLISHED.find(x=>x.id===id);
   if (!p) return;
   p.archived = !p.archived;
   renderPublished(); renderDashboard();
@@ -1248,8 +1250,8 @@ function toggleArchivePub(id) {
 }
 function deletePub(id) {
   if (!confirm('Remove this post from the gallery?')) return;
-  const i = PUBLISHED.findIndex(x=>x.id===id);
-  if (i>-1) { const t=PUBLISHED[i].title; PUBLISHED.splice(i,1); renderPublished(); renderDashboard(); showToast(`Removed "${t}"`); }
+  const i = window.PUBLISHED.findIndex(x=>x.id===id);
+  if (i>-1) { const t=window.PUBLISHED[i].title; window.PUBLISHED.splice(i,1); renderPublished(); renderDashboard(); showToast(`Removed "${t}"`); }
 }
 function filterPub(q)    { pubFilter.q=q; renderPublished(); }
 function filterPubTag(v) { pubFilter.tag=v; renderPublished(); }
@@ -1284,8 +1286,8 @@ function deleteTag(t) {
 function openEdit(source, id) {
   activeEditId = { source, id };
   let item;
-  if (source === 'sub') item = SUBMISSIONS.find(x=>x.id===id);
-  else item = PUBLISHED.find(x=>x.id===id);
+  if (source === 'sub') item = window.SUBMISSIONS.find(x=>x.id===id);
+  else item = window.PUBLISHED.find(x=>x.id===id);
   if (!item) return;
   document.getElementById('editModalTitle').textContent = source==='sub' ? 'Edit Submission' : 'Edit Post';
   document.getElementById('editTitle').value = item.title;
@@ -1296,7 +1298,7 @@ function openEdit(source, id) {
 }
 function saveEdit() {
   const { source, id } = activeEditId;
-  const list = source==='sub' ? SUBMISSIONS : PUBLISHED;
+  const list = source==='sub' ? window.SUBMISSIONS : window.PUBLISHED;
   const item = list.find(x=>x.id===id);
   if (!item) return;
   item.title = document.getElementById('editTitle').value.trim();
