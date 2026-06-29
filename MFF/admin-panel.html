@@ -637,9 +637,9 @@ window.sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ─── STATE ───
 const PALETTES = ['#1e1a16,#2a2016','#16191e,#0f1a22','#1a1620,#22162a','#1e1916,#281e10'];
-window.window.SUBMISSIONS = [];
-window.window.ORDERS = [];
-window.window.PUBLISHED = [];
+window.SUBMISSIONS = [];
+window.ORDERS = [];
+window.PUBLISHED = [];
 let ALL_TAGS    = ['candid','studio','outdoor','editorial','bw','ai','video','artistic','closeup','solo'];
 let activeOrderId = null;
 let activeEditId  = null;
@@ -654,9 +654,9 @@ async function loadAll() {
     sb.from('orders').select('*').order('created_at', { ascending: false }),
     sb.from('posts').select('*').order('created_at', { ascending: false }),
   ]);
-  window.window.SUBMISSIONS = (subs.data   || []).map(s => ({ ...s, date: s.created_at?.slice(0,10) }));
-  window.window.ORDERS      = (orders.data || []).map(o => ({ ...o, date: o.created_at?.slice(0,10), pkg: o.package }));
-  window.window.PUBLISHED   = posts.data   || [];
+  window.SUBMISSIONS = (subs.data   || []).map(s => ({ ...s, date: s.created_at?.slice(0,10) }));
+  window.ORDERS      = (orders.data || []).map(o => ({ ...o, date: o.created_at?.slice(0,10), pkg: o.package }));
+  window.PUBLISHED   = posts.data   || [];
   renderDashboard(); renderSubs(); renderOrders(); renderPublished(); renderTags();
 }
 
