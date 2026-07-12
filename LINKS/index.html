@@ -946,16 +946,24 @@
   copyModal.addEventListener("click", (e) => { if (e.target === copyModal) copyModal.hidden = true; });
 
   document.getElementById("copyClipboardBtn").addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(copyText.value);
-      const btn = document.getElementById("copyClipboardBtn");
-      const original = btn.textContent;
-      btn.textContent = "Copied!";
-      setTimeout(() => { btn.textContent = original; }, 1500);
-    } catch (e) {
-      copyText.focus();
-      copyText.select();
+    const btn = document.getElementById("copyClipboardBtn");
+    const original = btn.textContent;
+    copyText.focus();
+    copyText.select();
+
+    let copied = false;
+    if (window.isSecureContext && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(copyText.value);
+        copied = true;
+      } catch (e) {}
     }
+    if (!copied) {
+      try { copied = document.execCommand("copy"); } catch (e) {}
+    }
+
+    btn.textContent = copied ? "Copied!" : "Not copied — press Ctrl+C";
+    setTimeout(() => { btn.textContent = original; }, 2000);
   });
 
   // ---- init ----
