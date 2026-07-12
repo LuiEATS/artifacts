@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#1E3A5F" />
+<title>luiEATS — Links</title>
+<meta name="description" content="All luiEATS links in one place." />
+<link rel="icon" href="assets/luieats-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#3FBEE0;
+    --surface:#FFFFFF;
+    --ink:#23281F;
+    --ink-soft:#4B5449;
+    --teal-deep:#1E3A5F;
+    --teal-deeper:#142A45;
+    --gold:#2F7DA8;
+    --line:#DCE3D8;
+    --danger:#A8503F;
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:var(--font-body);
+    color:var(--ink);
+    background:linear-gradient(180deg, var(--bg) 0%, #EAF7FB 320px, #EAF7FB 100%);
+    display:flex;
+    justify-content:center;
+    padding:48px 16px 96px;
+  }
+  .page{
+    width:100%;
+    max-width:460px;
+    text-align:center;
+  }
+  .avatar{
+    position:relative;
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    background:#fff;
+    margin:0 auto 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    box-shadow:0 8px 24px rgba(20,42,69,0.18);
+    border:3px solid #fff;
+  }
+  .avatar img{width:100%;height:100%;object-fit:contain;padding:10px;}
+  .avatar-text{
+    font-family:var(--font-display);
+    font-size:2.2rem;
+    font-weight:600;
+    color:var(--teal-deep);
+  }
+  .avatar-edit-btn{
+    position:absolute;
+    bottom:-2px;
+    right:-2px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--teal-deep);
+    color:#fff;
+    border:2px solid #fff;
+    font-size:0.85rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:2;
+  }
+  .avatar-edit-btn:hover{background:var(--teal-deeper);}
+  .avatar-controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:0 0 12px;
+  }
+  .emoji-fallback-input{
+    width:64px;
+    text-align:center;
+    font-size:0.95rem;
+    padding:7px 8px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#FAFBFA;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    font-weight:600;
+    margin:0 0 6px;
+    color:var(--teal-deeper);
+  }
+  .title-input{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    font-weight:600;
+    color:var(--teal-deeper);
+    border:1px dashed var(--line);
+    border-radius:10px;
+    background:#fff;
+    padding:6px 10px;
+    margin:0 0 6px;
+  }
+  .bio{
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+  .bio-input{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    border:1px dashed var(--line);
+    border-radius:10px;
+    background:#fff;
+    padding:8px 10px;
+    margin:0 0 28px;
+  }
+  .title-input:focus,
+  .bio-input:focus,
+  .emoji-fallback-input:focus{outline:2px solid var(--teal-deep);outline-offset:1px;}
+
+  .links{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .link-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:16px 18px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    text-decoration:none;
+    color:var(--ink);
+    font-weight:600;
+    font-size:1rem;
+    box-shadow:0 2px 8px rgba(20,42,69,0.06);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .link-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(20,42,69,0.14);
+  }
+  .link-card:active{transform:translateY(0);}
+
+  .link-card.primary{
+    background:var(--teal-deep);
+    color:#fff;
+    border-color:var(--teal-deep);
+  }
+  .link-card.primary:hover{background:var(--teal-deeper);}
+
+  .link-card.gold{
+    background:var(--gold);
+    color:#fff;
+    border-color:var(--gold);
+  }
+
+  .link-icon{
+    flex:0 0 auto;
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    line-height:1;
+  }
+  .link-text{
+    flex:1 1 auto;
+    text-align:left;
+    min-width:0;
+  }
+  .link-title{display:block;}
+  .link-subtitle{
+    display:block;
+    font-weight:400;
+    font-size:0.8rem;
+    opacity:0.75;
+    margin-top:2px;
+  }
+  .link-arrow{
+    flex:0 0 auto;
+    opacity:0.5;
+    font-size:1.1rem;
+  }
+
+  .socials{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin:28px 0 8px;
+  }
+  .socials a{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.1rem;
+    text-decoration:none;
+    color:var(--teal-deep);
+    box-shadow:0 2px 8px rgba(20,42,69,0.06);
+    transition:transform .15s ease;
+  }
+  .socials a:hover{transform:translateY(-2px);}
+
+  footer{
+    margin-top:36px;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    opacity:0.7;
+  }
+
+  /* ---------- Edit mode ---------- */
+
+  .edit-hint{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    background:#fff;
+    border:1px dashed var(--line);
+    border-radius:12px;
+    padding:10px 14px;
+    margin:0 0 16px;
+    line-height:1.5;
+    text-align:left;
+  }
+
+  .edit-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .edit-row{display:flex;gap:8px;}
+  .edit-row input,
+  .edit-row select{
+    flex:1;
+    min-width:0;
+    font-family:var(--font-body);
+    font-size:0.85rem;
+    padding:9px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#FAFBFA;
+    color:var(--ink);
+  }
+  .edit-row input:focus,
+  .edit-row select:focus{outline:2px solid var(--teal-deep);outline-offset:1px;}
+  .edit-icon-input{flex:0 0 52px;text-align:center;padding-left:4px;padding-right:4px;}
+
+  .edit-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:6px;
+  }
+  .edit-actions-left{display:flex;gap:2px;}
+  .icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    color:var(--ink-soft);
+    padding:5px 9px;
+    border-radius:6px;
+    line-height:1;
+  }
+  .icon-btn:hover{background:var(--line);}
+  .icon-btn:disabled{opacity:0.25;cursor:default;}
+  .icon-btn:disabled:hover{background:none;}
+  .icon-btn.danger{color:var(--danger);}
+  .icon-btn.danger:hover{background:#A8503F1f;}
+
+  .add-card-btn{
+    border:2px dashed var(--line);
+    border-radius:16px;
+    padding:14px;
+    background:transparent;
+    color:var(--ink-soft);
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    width:100%;
+  }
+  .add-card-btn:hover{border-color:var(--teal-deep);color:var(--teal-deep);}
+
+  .edit-toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-top:20px;
+  }
+  .toolbar-btn{
+    font-family:var(--font-body);
+    font-size:0.82rem;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--teal-deep);
+    cursor:pointer;
+  }
+  .toolbar-btn:hover{background:#E8F6FB;}
+  .toolbar-btn.danger{color:var(--danger);border-color:#A8503F55;}
+  .toolbar-btn.danger:hover{background:#A8503F14;}
+
+  .edit-fab{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--teal-deep);
+    color:#fff;
+    border:none;
+    font-size:1.3rem;
+    box-shadow:0 6px 18px rgba(20,42,69,0.35);
+    cursor:pointer;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .edit-fab:hover{background:var(--teal-deeper);}
+  .edit-fab.active{background:var(--gold);}
+
+  .socials-edit{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:0 0 20px;
+  }
+  .social-edit-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .social-edit-row input{
+    font-family:var(--font-body);
+    font-size:0.85rem;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#FAFBFA;
+  }
+  .social-edit-row .edit-icon-input{flex:0 0 46px;text-align:center;}
+  .social-edit-row .social-label-input{flex:0 0 92px;}
+  .social-edit-row .social-url-input{flex:1;min-width:0;}
+
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(20,42,69,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+  }
+  .modal{
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    max-width:480px;
+    width:100%;
+    max-height:82vh;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    text-align:left;
+  }
+  .modal h2{
+    margin:0;
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    color:var(--teal-deeper);
+  }
+  .modal p{margin:0;font-size:0.85rem;color:var(--ink-soft);line-height:1.5;}
+  .modal textarea{
+    width:100%;
+    height:280px;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    line-height:1.5;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    resize:vertical;
+    background:#FAFBFA;
+  }
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;}
+  [hidden]{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="avatar" id="avatarWrap">
+    <img id="avatarImg" alt="" hidden>
+    <span class="avatar-text" id="avatarEmojiText">🍴</span>
+    <button class="avatar-edit-btn" id="avatarEditBtn" type="button" title="Change logo image" hidden>📷</button>
+  </div>
+  <input type="file" id="logoFileInput" accept="image/*" hidden>
+  <div class="avatar-controls" id="avatarControls" hidden>
+    <input type="text" id="avatarEmojiInput" class="emoji-fallback-input" placeholder="🍴" maxlength="8" aria-label="Emoji logo (used when no image is set)">
+    <button class="toolbar-btn danger" id="removeLogoBtn" type="button" hidden>✕ Remove Photo</button>
+  </div>
+
+  <h1 id="pageTitle">luiEATS</h1>
+  <input type="text" id="pageTitleInput" class="title-input" hidden aria-label="Page title">
+
+  <p class="bio" id="pageBio">Tap a link below</p>
+  <input type="text" id="pageBioInput" class="bio-input" hidden aria-label="Bio text">
+
+  <p class="edit-hint" id="editHint" hidden>
+    <strong>Edit mode.</strong> Change any text or link right here — it saves automatically in this browser.
+    Tap the 📷 on the logo to upload an image. Use the arrows to reorder, ✕ to remove, and the buttons
+    below to add a link or make your changes permanent.
+  </p>
+
+  <!-- SOCIAL ICON ROW (small circles under the bio) -->
+  <div id="socials"></div>
+
+  <!-- MAIN LINK LIST -->
+  <div class="links" id="links"></div>
+
+  <div class="edit-toolbar" id="editToolbar" hidden>
+    <button class="toolbar-btn" id="addSocialBtn" type="button">＋ Add Social</button>
+    <button class="toolbar-btn" id="copyCodeBtn" type="button">📋 Copy Code</button>
+    <button class="toolbar-btn danger" id="resetBtn" type="button">↺ Reset to Defaults</button>
+  </div>
+
+  <footer>&copy; <span id="year"></span> <span id="footerName">luiEATS</span></footer>
+</div>
+
+<button class="edit-fab" id="editToggle" type="button" aria-label="Edit links" title="Edit links">✏️</button>
+
+<div class="modal-backdrop" id="copyModal" hidden>
+  <div class="modal">
+    <h2>Copy your updated code</h2>
+    <p>
+      Your edits are already saved in this browser. To make them permanent (and show up on
+      other devices/browsers), paste this over the <code>DEFAULT_META</code>, <code>DEFAULT_LINKS</code>,
+      and <code>DEFAULT_SOCIALS</code> blocks near the bottom of this file's source code.
+      (If you uploaded a logo image, this code will be long — that's normal.)
+    </p>
+    <textarea id="copyText" readonly></textarea>
+    <div class="modal-actions">
+      <button class="toolbar-btn" id="copyClipboardBtn" type="button">Copy to Clipboard</button>
+      <button class="toolbar-btn" id="closeModalBtn" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STARTING LINKS (used the first time this page loads, before
+   any in-page edits are saved)
+   ------------------------------------------------------------
+   Add, remove, or reorder entries below. Each link is one { } block:
+
+     title      - required. Main text on the button.
+     subtitle   - optional. Small gray text under the title.
+     url        - required. A web address ("https://...") OR a
+                  local file path ("assets/brochure.pdf",
+                  "menu.pdf", "photos/gallery.jpg", etc).
+     icon       - optional. Any emoji, e.g. "📅", "📍", "📄".
+     style      - optional. "primary" (dark), "gold", or leave
+                  blank for the default white card.
+     newTab     - optional. true/false — open in a new tab.
+                  Defaults to true.
+
+   TIP: You don't have to edit this array by hand anymore — click
+   the ✏️ button on the page itself to add/edit/remove links in
+   the browser, then use "Copy Code" to update this array for good.
+   ============================================================ */
+
+  const DEFAULT_LINKS = [
+    { title: "Order Online",     subtitle: "Delivery & pickup",      url: "https://example.com/order",           icon: "🛍️", style: "primary" },
+    { title: "Menu",             subtitle: "See what we're serving", url: "menu.pdf",                             icon: "📋" },
+    { title: "Reservations",     subtitle: "Book a table",           url: "https://example.com/reserve",         icon: "📅" },
+    { title: "Location & Hours", subtitle: "Find us",                url: "https://maps.google.com/?q=luiEATS",  icon: "📍" },
+    { title: "Contact",          subtitle: "Questions? Reach out",   url: "mailto:hello@luieats.com",            icon: "✉️" },
+  ];
+
+  const DEFAULT_SOCIALS = [
+    { label: "Instagram", url: "https://instagram.com/luieats", icon: "📷" },
+    { label: "Facebook",  url: "https://facebook.com/luieats",  icon: "📘" },
+  ];
+
+  /* ============================================================
+     STARTING PAGE INFO (logo, title, bio) — also editable on the
+     page itself via the ✏️ button, same as the links above.
+     ============================================================ */
+
+  const DEFAULT_META = {
+    title: "luiEATS",
+    bio: "Tap a link below",
+    avatarEmoji: "🍴",
+    avatarImage: "assets/luieats-logo.png"   // set automatically when you upload a logo image
+  };
+
+  // ---- state ----
+
+  const STORAGE_LINKS = "luieats_links_v1";
+  const STORAGE_SOCIALS = "luieats_socials_v1";
+  const STORAGE_META = "luieats_meta_v1";
+
+  let editMode = false;
+  let links = loadFromStorage(STORAGE_LINKS, DEFAULT_LINKS);
+  let socials = loadFromStorage(STORAGE_SOCIALS, DEFAULT_SOCIALS);
+  let meta = loadMeta();
+
+  function loadFromStorage(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return fallback.map(item => ({ ...item }));
+  }
+
+  function loadMeta() {
+    try {
+      const raw = localStorage.getItem(STORAGE_META);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return { ...DEFAULT_META, ...parsed };
+      }
+    } catch (e) {}
+    return { ...DEFAULT_META };
+  }
+
+  function saveLinks() { localStorage.setItem(STORAGE_LINKS, JSON.stringify(links)); }
+  function saveSocials() { localStorage.setItem(STORAGE_SOCIALS, JSON.stringify(socials)); }
+  function saveMeta() { localStorage.setItem(STORAGE_META, JSON.stringify(meta)); }
+
+  function isNewTab(link) { return link.newTab === false ? false : true; }
+
+  // ---- elements ----
+
+  const linksEl = document.getElementById("links");
+  const socialsEl = document.getElementById("socials");
+  const editHint = document.getElementById("editHint");
+  const editToolbar = document.getElementById("editToolbar");
+  const editToggle = document.getElementById("editToggle");
+  const copyModal = document.getElementById("copyModal");
+  const copyText = document.getElementById("copyText");
+
+  const avatarImg = document.getElementById("avatarImg");
+  const avatarEmojiText = document.getElementById("avatarEmojiText");
+  const avatarEditBtn = document.getElementById("avatarEditBtn");
+  const logoFileInput = document.getElementById("logoFileInput");
+  const avatarControls = document.getElementById("avatarControls");
+  const avatarEmojiInput = document.getElementById("avatarEmojiInput");
+  const removeLogoBtn = document.getElementById("removeLogoBtn");
+  const pageTitleEl = document.getElementById("pageTitle");
+  const pageTitleInput = document.getElementById("pageTitleInput");
+  const pageBioEl = document.getElementById("pageBio");
+  const pageBioInput = document.getElementById("pageBioInput");
+  const footerName = document.getElementById("footerName");
+
+  // ---- view: page info (logo, title, bio) ----
+
+  function renderMeta() {
+    document.title = (meta.title || "Links") + " — Links";
+    footerName.textContent = meta.title || "";
+
+    if (meta.avatarImage) {
+      avatarImg.src = meta.avatarImage;
+      avatarImg.alt = (meta.title || "") + " logo";
+      avatarImg.hidden = false;
+      avatarEmojiText.hidden = true;
+    } else {
+      avatarImg.hidden = true;
+      avatarImg.removeAttribute("src");
+      avatarEmojiText.hidden = false;
+      avatarEmojiText.textContent = meta.avatarEmoji || "🔗";
+    }
+
+    avatarEditBtn.hidden = !editMode;
+    avatarControls.hidden = !editMode;
+    removeLogoBtn.hidden = !meta.avatarImage;
+    avatarEmojiInput.value = meta.avatarEmoji || "";
+
+    pageTitleEl.hidden = editMode;
+    pageTitleInput.hidden = !editMode;
+    pageTitleInput.value = meta.title || "";
+    pageTitleEl.textContent = meta.title || "";
+
+    pageBioEl.hidden = editMode;
+    pageBioInput.hidden = !editMode;
+    pageBioInput.value = meta.bio || "";
+    pageBioEl.textContent = meta.bio || "";
+  }
+
+  avatarEditBtn.addEventListener("click", () => logoFileInput.click());
+
+  logoFileInput.addEventListener("change", () => {
+    const file = logoFileInput.files && logoFileInput.files[0];
+    logoFileInput.value = "";
+    if (!file) return;
+    if (file.size > 1.5 * 1024 * 1024) {
+      alert("That image is a little large to save in the browser — try one under ~1.5MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      meta.avatarImage = reader.result;
+      saveMeta();
+      renderMeta();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  removeLogoBtn.addEventListener("click", () => {
+    meta.avatarImage = null;
+    saveMeta();
+    renderMeta();
+  });
+
+  avatarEmojiInput.addEventListener("input", () => {
+    meta.avatarEmoji = avatarEmojiInput.value;
+    saveMeta();
+    if (!meta.avatarImage) avatarEmojiText.textContent = meta.avatarEmoji || "🔗";
+  });
+
+  pageTitleInput.addEventListener("input", () => {
+    meta.title = pageTitleInput.value;
+    saveMeta();
+    document.title = (meta.title || "Links") + " — Links";
+    footerName.textContent = meta.title || "";
+  });
+
+  pageBioInput.addEventListener("input", () => {
+    meta.bio = pageBioInput.value;
+    saveMeta();
+  });
+
+  // ---- view: link cards (read-only) ----
+
+  function buildLinkCard(link) {
+    const a = document.createElement("a");
+    a.href = link.url;
+    a.className = "link-card" + (link.style ? " " + link.style : "");
+    if (isNewTab(link)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+
+    const icon = document.createElement("span");
+    icon.className = "link-icon";
+    icon.textContent = link.icon || "🔗";
+
+    const text = document.createElement("span");
+    text.className = "link-text";
+    const title = document.createElement("span");
+    title.className = "link-title";
+    title.textContent = link.title;
+    text.appendChild(title);
+    if (link.subtitle) {
+      const sub = document.createElement("span");
+      sub.className = "link-subtitle";
+      sub.textContent = link.subtitle;
+      text.appendChild(sub);
+    }
+
+    const arrow = document.createElement("span");
+    arrow.className = "link-arrow";
+    arrow.textContent = "›";
+
+    a.append(icon, text, arrow);
+    return a;
+  }
+
+  // ---- view: link edit card ----
+
+  function buildLinkEditCard(link, index) {
+    const card = document.createElement("div");
+    card.className = "edit-card";
+
+    const row1 = document.createElement("div");
+    row1.className = "edit-row";
+
+    const iconInput = document.createElement("input");
+    iconInput.className = "edit-icon-input";
+    iconInput.value = link.icon || "";
+    iconInput.placeholder = "🔗";
+    iconInput.setAttribute("aria-label", "Icon (emoji)");
+    iconInput.addEventListener("input", () => { links[index].icon = iconInput.value; saveLinks(); });
+
+    const titleInput = document.createElement("input");
+    titleInput.value = link.title || "";
+    titleInput.placeholder = "Title";
+    titleInput.setAttribute("aria-label", "Title");
+    titleInput.addEventListener("input", () => { links[index].title = titleInput.value; saveLinks(); });
+
+    row1.append(iconInput, titleInput);
+
+    const row2 = document.createElement("div");
+    row2.className = "edit-row";
+    const subtitleInput = document.createElement("input");
+    subtitleInput.value = link.subtitle || "";
+    subtitleInput.placeholder = "Subtitle (optional)";
+    subtitleInput.setAttribute("aria-label", "Subtitle");
+    subtitleInput.addEventListener("input", () => { links[index].subtitle = subtitleInput.value; saveLinks(); });
+    row2.append(subtitleInput);
+
+    const row3 = document.createElement("div");
+    row3.className = "edit-row";
+    const urlInput = document.createElement("input");
+    urlInput.value = link.url || "";
+    urlInput.placeholder = "https://... or a file like menu.pdf";
+    urlInput.setAttribute("aria-label", "URL or file path");
+    urlInput.addEventListener("input", () => { links[index].url = urlInput.value; saveLinks(); });
+
+    const styleSelect = document.createElement("select");
+    styleSelect.setAttribute("aria-label", "Button style");
+    [["", "White"], ["primary", "Dark"], ["gold", "Gold"]].forEach(([value, label]) => {
+      const opt = document.createElement("option");
+      opt.value = value;
+      opt.textContent = label;
+      if ((link.style || "") === value) opt.selected = true;
+      styleSelect.appendChild(opt);
+    });
+    styleSelect.style.flex = "0 0 90px";
+    styleSelect.addEventListener("change", () => { links[index].style = styleSelect.value || undefined; saveLinks(); });
+
+    row3.append(urlInput, styleSelect);
+
+    const actions = document.createElement("div");
+    actions.className = "edit-actions";
+
+    const leftActions = document.createElement("div");
+    leftActions.className = "edit-actions-left";
+
+    const upBtn = document.createElement("button");
+    upBtn.type = "button";
+    upBtn.className = "icon-btn";
+    upBtn.textContent = "↑";
+    upBtn.title = "Move up";
+    upBtn.disabled = index === 0;
+    upBtn.addEventListener("click", () => {
+      [links[index - 1], links[index]] = [links[index], links[index - 1]];
+      saveLinks(); renderLinks();
+    });
+
+    const downBtn = document.createElement("button");
+    downBtn.type = "button";
+    downBtn.className = "icon-btn";
+    downBtn.textContent = "↓";
+    downBtn.title = "Move down";
+    downBtn.disabled = index === links.length - 1;
+    downBtn.addEventListener("click", () => {
+      [links[index + 1], links[index]] = [links[index], links[index + 1]];
+      saveLinks(); renderLinks();
+    });
+
+    leftActions.append(upBtn, downBtn);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "icon-btn danger";
+    deleteBtn.textContent = "✕ Remove";
+    deleteBtn.addEventListener("click", () => {
+      links.splice(index, 1);
+      saveLinks(); renderLinks();
+    });
+
+    actions.append(leftActions, deleteBtn);
+    card.append(row1, row2, row3, actions);
+    return card;
+  }
+
+  function renderLinks() {
+    linksEl.innerHTML = "";
+    if (!editMode) {
+      links.forEach(link => linksEl.appendChild(buildLinkCard(link)));
+      return;
+    }
+    links.forEach((link, i) => linksEl.appendChild(buildLinkEditCard(link, i)));
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "add-card-btn";
+    addBtn.textContent = "＋ Add Link";
+    addBtn.addEventListener("click", () => {
+      links.push({ title: "New Link", subtitle: "", url: "https://", icon: "🔗" });
+      saveLinks(); renderLinks();
+    });
+    linksEl.appendChild(addBtn);
+  }
+
+  // ---- view: socials ----
+
+  function renderSocials() {
+    socialsEl.innerHTML = "";
+    if (!editMode) {
+      socialsEl.className = "socials";
+      if (socials.length === 0) { socialsEl.style.display = "none"; return; }
+      socialsEl.style.display = "flex";
+      socials.forEach(s => {
+        const a = document.createElement("a");
+        a.href = s.url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.title = s.label;
+        a.textContent = s.icon || "🔗";
+        socialsEl.appendChild(a);
+      });
+      return;
+    }
+
+    socialsEl.className = "socials-edit";
+    socialsEl.style.display = "flex";
+    socials.forEach((s, i) => {
+      const row = document.createElement("div");
+      row.className = "social-edit-row";
+
+      const iconInput = document.createElement("input");
+      iconInput.className = "edit-icon-input";
+      iconInput.value = s.icon || "";
+      iconInput.placeholder = "📷";
+      iconInput.setAttribute("aria-label", "Icon (emoji)");
+      iconInput.addEventListener("input", () => { socials[i].icon = iconInput.value; saveSocials(); });
+
+      const labelInput = document.createElement("input");
+      labelInput.className = "social-label-input";
+      labelInput.value = s.label || "";
+      labelInput.placeholder = "Label";
+      labelInput.setAttribute("aria-label", "Label");
+      labelInput.addEventListener("input", () => { socials[i].label = labelInput.value; saveSocials(); });
+
+      const urlInput = document.createElement("input");
+      urlInput.className = "social-url-input";
+      urlInput.value = s.url || "";
+      urlInput.placeholder = "https://...";
+      urlInput.setAttribute("aria-label", "URL");
+      urlInput.addEventListener("input", () => { socials[i].url = urlInput.value; saveSocials(); });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "icon-btn danger";
+      deleteBtn.textContent = "✕";
+      deleteBtn.title = "Remove";
+      deleteBtn.addEventListener("click", () => {
+        socials.splice(i, 1);
+        saveSocials(); renderSocials();
+      });
+
+      row.append(iconInput, labelInput, urlInput, deleteBtn);
+      socialsEl.appendChild(row);
+    });
+  }
+
+  // ---- edit mode toggle ----
+
+  editToggle.addEventListener("click", () => {
+    editMode = !editMode;
+    editToggle.textContent = editMode ? "✓" : "✏️";
+    editToggle.title = editMode ? "Done editing" : "Edit links";
+    editToggle.setAttribute("aria-label", editToggle.title);
+    editToggle.classList.toggle("active", editMode);
+    editHint.hidden = !editMode;
+    editToolbar.hidden = !editMode;
+    renderLinks();
+    renderSocials();
+    renderMeta();
+  });
+
+  document.getElementById("addSocialBtn").addEventListener("click", () => {
+    socials.push({ label: "New", url: "https://", icon: "🔗" });
+    saveSocials(); renderSocials();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (!confirm("Reset the logo, title, bio, links, and socials back to the defaults built into this page? This can't be undone.")) return;
+    links = DEFAULT_LINKS.map(item => ({ ...item }));
+    socials = DEFAULT_SOCIALS.map(item => ({ ...item }));
+    meta = { ...DEFAULT_META };
+    saveLinks(); saveSocials(); saveMeta();
+    renderLinks(); renderSocials(); renderMeta();
+  });
+
+  // ---- copy code modal ----
+
+  function formatObj(o, keys) {
+    const parts = keys
+      .filter(k => o[k] !== undefined && o[k] !== "")
+      .map(k => `${k}: ${JSON.stringify(o[k])}`);
+    return `    { ${parts.join(", ")} },`;
+  }
+
+  function buildExportCode() {
+    const metaCode = `const DEFAULT_META = ${JSON.stringify(meta, null, 2)};`;
+    const linksCode = links.map(l => formatObj(l, ["title", "subtitle", "url", "icon", "style", "newTab"])).join("\n");
+    const socialsCode = socials.map(s => formatObj(s, ["label", "url", "icon"])).join("\n");
+    return `${metaCode}\n\nconst DEFAULT_LINKS = [\n${linksCode}\n];\n\nconst DEFAULT_SOCIALS = [\n${socialsCode}\n];`;
+  }
+
+  document.getElementById("copyCodeBtn").addEventListener("click", () => {
+    copyText.value = buildExportCode();
+    copyModal.hidden = false;
+    copyText.focus();
+    copyText.select();
+  });
+
+  document.getElementById("closeModalBtn").addEventListener("click", () => { copyModal.hidden = true; });
+  copyModal.addEventListener("click", (e) => { if (e.target === copyModal) copyModal.hidden = true; });
+
+  document.getElementById("copyClipboardBtn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(copyText.value);
+      const btn = document.getElementById("copyClipboardBtn");
+      const original = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    } catch (e) {
+      copyText.focus();
+      copyText.select();
+    }
+  });
+
+  // ---- init ----
+
+  renderLinks();
+  renderSocials();
+  renderMeta();
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
