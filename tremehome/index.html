@@ -393,15 +393,15 @@ const LISTING = {
   ],
 
   nearby: [
-    { icon: "🎷", name: "Louis Armstrong Park & Congo Square", distance: "0.3 mi", blurb: "Where jazz began — free to walk any time." },
-    { icon: "🏛️", name: "French Quarter", distance: "0.5 mi", blurb: "Jackson Square, St. Louis Cathedral, and beyond." },
-    { icon: "🎺", name: "Preservation Hall", distance: "0.6 mi", blurb: "Legendary traditional jazz, nightly sets." },
-    { icon: "🎶", name: "Frenchmen Street", distance: "0.8 mi", blurb: "Live music clubs, locals' favorite over Bourbon St." },
-    { icon: "⚰️", name: "St. Louis Cemetery No. 1", distance: "0.4 mi", blurb: "The city's oldest above-ground cemetery." },
-    { icon: "🪘", name: "Backstreet Cultural Museum", distance: "0.2 mi", blurb: "Mardi Gras Indian suits & second line history." },
-    { icon: "🍗", name: "Dooky Chase's Restaurant", distance: "0.4 mi", blurb: "Icon of Creole soul food since 1941." },
-    { icon: "🚣", name: "Bayou St. John", distance: "1.7 mi", blurb: "Kayaking, paddleboards, and sunset picnics." },
-    { icon: "🌳", name: "City Park & NOMA", distance: "2.4 mi", blurb: "Ancient live oaks and the art museum's sculpture garden." },
+    { icon: "🎷", name: "Louis Armstrong Park & Congo Square", distance: "0.8 mi", walk: "17 min walk", blurb: "Where jazz began — free to walk any time." },
+    { icon: "🏛️", name: "French Quarter", distance: "1.2 mi", walk: "26 min walk", blurb: "Jackson Square, St. Louis Cathedral, and beyond." },
+    { icon: "🎺", name: "Preservation Hall", distance: "1.2 mi", walk: "26 min walk", blurb: "Legendary traditional jazz, nightly sets." },
+    { icon: "🎶", name: "Frenchmen Street", distance: "0.8 mi", walk: "18 min walk", blurb: "Live music clubs, locals' favorite over Bourbon St." },
+    { icon: "⚰️", name: "St. Louis Cemetery No. 1", distance: "1.1 mi", walk: "26 min walk", blurb: "The city's oldest above-ground cemetery." },
+    { icon: "🪘", name: "Backstreet Cultural Museum", distance: "0.4 mi", walk: "10 min walk", blurb: "Mardi Gras Indian suits & second line history." },
+    { icon: "🍗", name: "Dooky Chase's Restaurant", distance: "0.7 mi", walk: "15 min walk", blurb: "Icon of Creole soul food since 1941." },
+    { icon: "🚣", name: "Bayou St. John", distance: "0.8 mi", walk: "18 min walk", blurb: "Kayaking, paddleboards, and sunset picnics." },
+    { icon: "🌳", name: "City Park & NOMA", distance: "2 mi", walk: "44 min walk", blurb: "Ancient live oaks and the art museum's sculpture garden." },
   ],
 
   // Add/remove listing sites as you get real links
@@ -484,7 +484,7 @@ function render(){
     card.innerHTML = `
       <div class="top">
         <span class="icon">${spot.icon}</span>
-        <span class="dist-badge">${spot.distance}</span>
+        <span class="dist-badge">${spot.distance} · ${spot.walk}</span>
       </div>
       <h3>${spot.name}</h3>
       <p>${spot.blurb}</p>
