@@ -334,7 +334,7 @@
 <footer id="contact">
   <div class="wrap">
     <h3 id="ctaHeading">Interested in 1234 N. Villere Street?</h3>
-    <p class="agent-line" id="agentLine">Contact <a href="mailto:agent@example.com">Your Agent Name</a> · (504) 555-0134</p>
+    <p class="agent-line" id="agentLine">Contact <a href="mailto:agent@example.com">agent@example.com</a> · (504) 555-0134</p>
     <p class="fine">TremeHome.com is a for-sale listing page. All information is deemed reliable but not guaranteed — verify all details independently. Equal Housing Opportunity.</p>
   </div>
 </footer>
@@ -406,14 +406,13 @@ const LISTING = {
 
   // Add/remove listing sites as you get real links
   listingLinks: [
-    { label: "Zillow", url: "#" },
+    { label: "Zillow", url: "https://www.zillow.com/homedetails/1523-Columbus-St-New-Orleans-LA-70116/148978062_zpid/" },
     { label: "Realtor.com", url: "#" },
-    { label: "Redfin", url: "#" },
+    { label: "Redfin", url: "https://www.redfin.com/LA/New-Orleans/1523-Columbus-St-70116/home/79452029" },
     { label: "Full MLS Listing", url: "#" },
   ],
   mlsNumber: "2572669",
 
-  agentName: "Your Agent Name",
   agentEmail: "luicaleon@gmail.com",
   agentPhone: "(504) 249-2264",
 };
@@ -510,7 +509,7 @@ function render(){
   // footer
   document.getElementById('ctaHeading').textContent = `Interested in ${LISTING.address}?`;
   document.getElementById('agentLine').innerHTML =
-    `Contact <a href="mailto:${LISTING.agentEmail}">${LISTING.agentName}</a> · ${LISTING.agentPhone}`;
+    `Contact <a href="mailto:${LISTING.agentEmail}">${LISTING.agentEmail}</a> · ${LISTING.agentPhone}`;
 }
 
 /* ========================= lightbox ========================= */
