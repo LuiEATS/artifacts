@@ -17,13 +17,12 @@
   :root{
     --purple:#3f1657;
     --purple-dark:#2a0f3b;
-    --green:#166a3e;
-    --gold:#eab308;
-    --gold-light:#facc15;
+    --orange:#e2661c;
+    --orange-light:#f6924c;
+    --orange-dark:#b8460f;
     --cream:#faf4e6;
     --cream-dark:#f0e6cf;
     --ink:#241a12;
-    --brick:#9c3b2e;
     --line:#e2d6b8;
     --radius:14px;
     --shadow: 0 10px 30px rgba(42,15,59,0.14);
@@ -52,13 +51,13 @@
     letter-spacing:.14em;
     font-size:.75rem;
     font-weight:800;
-    color:var(--gold);
+    color:var(--orange-dark);
   }
 
   /* fleur-de-lis divider */
   .fdl-divider{ display:flex; align-items:center; gap:14px; margin:8px 0 28px; }
   .fdl-divider::before,.fdl-divider::after{ content:""; flex:1; height:1px; background:var(--line); }
-  .fdl-divider svg{ width:22px; height:22px; fill:var(--gold); flex:none; }
+  .fdl-divider svg{ width:22px; height:22px; fill:var(--orange); flex:none; }
 
   /* ===== HEADER ===== */
   header{
@@ -67,13 +66,13 @@
     color:#fff;
     box-shadow:0 2px 14px rgba(0,0,0,.25);
   }
-  .stripe{ height:5px; background:repeating-linear-gradient(90deg, var(--purple) 0 24px, var(--green) 24px 48px, var(--gold) 48px 72px); }
+  .stripe{ height:5px; background:repeating-linear-gradient(90deg, var(--purple) 0 24px, var(--orange) 24px 48px); }
   .nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1080px; margin:0 auto; }
   .brand{ display:flex; align-items:center; gap:10px; font-family:'Playfair Display',serif; font-weight:800; font-size:1.25rem; text-decoration:none; color:#fff; }
-  .brand svg{ width:26px; height:26px; fill:var(--gold); }
+  .brand svg{ width:26px; height:26px; fill:var(--orange); }
   .navlinks{ display:flex; gap:26px; list-style:none; margin:0; padding:0; }
   .navlinks a{ text-decoration:none; color:#eee5f3; font-weight:700; font-size:.92rem; letter-spacing:.02em; }
-  .navlinks a:hover{ color:var(--gold-light); }
+  .navlinks a:hover{ color:var(--orange-light); }
   .navToggle{ display:none; background:none; border:0; color:#fff; font-size:1.6rem; cursor:pointer; }
   @media (max-width:760px){
     .navlinks{ position:absolute; top:100%; left:0; right:0; background:var(--purple-dark); flex-direction:column; padding:10px 24px 18px; gap:14px; display:none; }
@@ -89,24 +88,25 @@
   .hero-fade{ position:absolute; inset:0; z-index:2; background:linear-gradient(180deg, rgba(42,15,59,0) 30%, rgba(24,8,34,.92) 100%); }
   .ribbon{
     position:absolute; z-index:3; top:18px; left:0;
-    background:var(--brick); color:#fff; font-weight:800; letter-spacing:.06em;
+    background:var(--orange-dark); color:#fff; font-weight:800; letter-spacing:.06em;
     padding:8px 18px 8px 24px; font-size:.85rem; text-transform:uppercase;
     box-shadow:0 4px 10px rgba(0,0,0,.25);
     border-radius:0 6px 6px 0;
   }
   .hero-info{ position:absolute; z-index:3; left:0; right:0; bottom:0; padding:24px; }
   .hero-info .wrap{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:18px; }
+  #hoodTag{ color:var(--orange-light); }
   .addr h1{ font-size:clamp(1.6rem, 4vw, 2.6rem); margin-bottom:.15em; }
   .addr .sub{ font-size:1.05rem; color:#e9dcf2; font-weight:600; }
   .price-tag{
-    background:var(--gold); color:var(--purple-dark);
+    background:var(--orange); color:#fff;
     font-family:'Playfair Display',serif; font-weight:800;
     font-size:clamp(1.6rem,3.4vw,2.2rem);
     padding:10px 22px; border-radius:10px;
     box-shadow:0 8px 18px rgba(0,0,0,.3);
     white-space:nowrap;
   }
-  .price-tag small{ display:block; font-family:'Nunito Sans',sans-serif; font-size:.62rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--purple-dark); opacity:.75; }
+  .price-tag small{ display:block; font-family:'Nunito Sans',sans-serif; font-size:.62rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#fff; opacity:.85; }
 
   .stat-strip{ background:#fff; border-bottom:1px solid var(--line); }
   .stat-strip .wrap{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:0; }
@@ -144,7 +144,7 @@
     position:absolute; inset:0; z-index:1;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
     background:
-      radial-gradient(circle at 30% 20%, rgba(234,179,8,.25), transparent 55%),
+      radial-gradient(circle at 30% 20%, rgba(226,102,28,.3), transparent 55%),
       linear-gradient(135deg, var(--purple), var(--purple-dark));
     color:#f1e6fa; text-align:center; padding:12px;
   }
@@ -162,7 +162,7 @@
   .nearby-card .top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
   .nearby-card .icon{ font-size:1.5rem; }
   .nearby-card h3{ font-size:1.05rem; margin:0; color:var(--purple); }
-  .dist-badge{ background:var(--green); color:#fff; font-size:.72rem; font-weight:800; padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .dist-badge{ background:var(--orange-dark); color:#fff; font-size:.72rem; font-weight:800; padding:4px 10px; border-radius:999px; white-space:nowrap; }
   .nearby-card p{ margin:0; font-size:.92rem; color:#54493a; }
 
   /* listing links */
@@ -174,7 +174,7 @@
     box-shadow:var(--shadow); transition:all .15s ease;
   }
   .link-btn:hover{ background:var(--purple); color:#fff; transform:translateY(-2px); }
-  .link-btn .dot{ width:10px; height:10px; border-radius:50%; background:var(--gold); flex:none; }
+  .link-btn .dot{ width:10px; height:10px; border-radius:50%; background:var(--orange); flex:none; }
   .mls-note{ text-align:center; margin-top:18px; color:#7a6f5c; font-size:.88rem; }
 
   /* footer */
@@ -182,7 +182,7 @@
   footer .wrap{ text-align:center; }
   footer h3{ color:#fff; font-size:1.3rem; }
   .agent-line{ margin:6px 0 20px; font-size:.98rem; }
-  .agent-line a{ color:var(--gold-light); text-decoration:none; font-weight:700; }
+  .agent-line a{ color:var(--orange-light); text-decoration:none; font-weight:700; }
   .fine{ font-size:.75rem; color:#a893ba; margin-top:18px; }
 
   /* lightbox */
@@ -221,7 +221,7 @@
   <nav class="nav">
     <a class="brand" href="#top">
       <svg viewBox="0 0 24 24"><path d="M12 2c1.5 2 1.5 4-.2 5.3C13.4 6 15 6 16 8c-1.7.2-2.6 1.4-2.2 3 1.7-.6 3 .2 3.6 2-1.8-.3-2.9.6-3 2.2 1.6-.4 2.6.4 2.6 2H7c0-1.6 1-2.4 2.6-2-.1-1.6-1.2-2.5-3-2.2.6-1.8 1.9-2.6 3.6-2-.4-1.6.5-2.8 2.2-3-1.7-.7-1.9-2.6-.4-4.3z"/></svg>
-      TremeHome<span style="color:var(--gold)">.com</span>
+      TremeHome<span style="color:var(--orange)">.com</span>
     </a>
     <ul class="navlinks" id="navlinks">
       <li><a href="#facts">The Home</a></li>
