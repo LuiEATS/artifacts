@@ -83,7 +83,7 @@
   /* ===== HERO ===== */
   .hero{ position:relative; background:var(--purple); color:#fff; overflow:hidden; }
   .hero-photo-wrap{ position:relative; height:min(64vw, 560px); min-height:320px; }
-  .hero-photo-wrap img{ width:100%; height:100%; object-fit:cover; }
+  .hero-photo-wrap img{ position:relative; z-index:1; width:100%; height:100%; object-fit:cover; }
   .hero-photo-wrap .placeholder{ position:absolute; inset:0; }
   .hero-fade{ position:absolute; inset:0; z-index:2; background:linear-gradient(180deg, rgba(42,15,59,0) 30%, rgba(24,8,34,.92) 100%); }
   .ribbon{
@@ -379,17 +379,17 @@ const LISTING = {
 
   description: "A classic Creole cottage in the heart of Tremé — New Orleans' oldest Black neighborhood and the birthplace of jazz. Original heart-pine floors, a deep front porch for second-line watching, and a private courtyard out back.",
 
-  heroPhoto: "photos/hero.jpg",
+  heroPhoto: "photos/front-exterior.jpg",
 
   gallery: [
-    { src: "photos/front-porch.jpg",  caption: "Front porch & gallery" },
-    { src: "photos/living-room.jpg",  caption: "Living room" },
-    { src: "photos/kitchen.jpg",      caption: "Kitchen" },
-    { src: "photos/primary-bed.jpg",  caption: "Primary bedroom" },
-    { src: "photos/bathroom.jpg",     caption: "Bathroom" },
-    { src: "photos/courtyard.jpg",    caption: "Private courtyard" },
-    { src: "photos/dining.jpg",       caption: "Dining room" },
-    { src: "photos/street.jpg",       caption: "Street view" },
+    { src: "photos/front-exterior.jpg",   caption: "Front of the house" },
+    { src: "photos/street-view.jpg",      caption: "Street view" },
+    { src: "photos/living-kitchen.jpg",   caption: "Living room & kitchen" },
+    { src: "photos/sofa-living-room.jpg", caption: "Living room" },
+    { src: "photos/backyard.jpg",         caption: "Back yard" },
+    { src: "photos/kitchen.jpg",          caption: "Kitchen" },
+    { src: "photos/primary-bed.jpg",      caption: "Primary bedroom" },
+    { src: "photos/bathroom.jpg",         caption: "Bathroom" },
   ],
 
   nearby: [
