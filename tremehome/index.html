@@ -333,7 +333,7 @@
 
 <footer id="contact">
   <div class="wrap">
-    <h3>Interested in 1234 N. Villere Street?</h3>
+    <h3 id="ctaHeading">Interested in 1234 N. Villere Street?</h3>
     <p class="agent-line" id="agentLine">Contact <a href="mailto:agent@example.com">Your Agent Name</a> · (504) 555-0134</p>
     <p class="fine">TremeHome.com is a for-sale listing page. All information is deemed reliable but not guaranteed — verify all details independently. Equal Housing Opportunity.</p>
   </div>
@@ -365,16 +365,16 @@
    ========================================================= */
 const LISTING = {
   status: "For Sale",              // "For Sale" | "Under Contract" | "Sold"
-  price: 475000,                   // just the number — formatting is automatic
+  price: 205000,                   // just the number — formatting is automatic
   neighborhood: "Tremé · New Orleans",
-  address: "1234 N. Villere Street",
-  cityStateZip: "New Orleans, LA 70116",
+  address: "1523 Columbus Street",
+  cityStateZip: "New Orleans, LA [ADD ZIP]",
 
-  beds: 3,
+  beds: 2,
   baths: 2,
-  sqft: 1850,
-  lotSize: "0.15 acres",
-  yearBuilt: 1890,
+  sqft: 984,
+  lotSize: "0.15 acres",           // placeholder — update with the real lot size
+  yearBuilt: 1890,                 // placeholder — update with the real year built
   style: "Creole Cottage",
 
   description: "A classic Creole cottage in the heart of Tremé — New Orleans' oldest Black neighborhood and the birthplace of jazz. Original heart-pine floors, a deep front porch for second-line watching, and a private courtyard out back.",
@@ -508,6 +508,7 @@ function render(){
   document.getElementById('mlsNote').textContent = `MLS# ${LISTING.mlsNumber}`;
 
   // footer
+  document.getElementById('ctaHeading').textContent = `Interested in ${LISTING.address}?`;
   document.getElementById('agentLine').innerHTML =
     `Contact <a href="mailto:${LISTING.agentEmail}">${LISTING.agentName}</a> · ${LISTING.agentPhone}`;
 }
