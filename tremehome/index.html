@@ -149,12 +149,6 @@
     color:#f1e6fa; text-align:center; padding:12px;
   }
   .photo-placeholder .icon{ font-size:1.8rem; }
-  .photo-placeholder small{ font-size:.72rem; letter-spacing:.04em; opacity:.85; }
-  .photo-cap{
-    position:absolute; z-index:3; left:0; right:0; bottom:0;
-    background:linear-gradient(0deg, rgba(0,0,0,.65), transparent);
-    color:#fff; font-size:.82rem; font-weight:700; padding:20px 12px 8px;
-  }
 
   /* nearby */
   .nearby-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px; }
@@ -193,7 +187,6 @@
   .lightbox.open{ display:flex; }
   .lightbox-inner{ position:relative; max-width:900px; width:100%; text-align:center; }
   .lightbox-inner img{ max-height:78vh; margin:0 auto; border-radius:8px; width:auto; }
-  .lightbox-cap{ color:#f1e6fa; margin-top:12px; font-weight:700; }
   .lightbox button{
     position:absolute; background:rgba(255,255,255,.12); border:none; color:#fff;
     width:42px; height:42px; border-radius:50%; font-size:1.3rem; cursor:pointer;
@@ -240,7 +233,7 @@
       <span class="icon">🏠</span>
       <small>Add hero photo — see LISTING.heroPhoto in the code</small>
     </div>
-    <img id="heroImg" alt="Front of the home">
+    <img id="heroImg">
     <div class="hero-fade"></div>
     <div class="ribbon" id="statusRibbon">For Sale</div>
     <div class="hero-info">
@@ -346,7 +339,6 @@
     <button class="lb-prev" id="lbPrev">&#8249;</button>
     <img id="lbImg" src="" alt="">
     <button class="lb-next" id="lbNext">&#8250;</button>
-    <div class="lightbox-cap" id="lbCap"></div>
   </div>
 </div>
 
@@ -386,10 +378,11 @@ const LISTING = {
     { src: "photos/street-view.jpg",      caption: "Street view" },
     { src: "photos/living-kitchen.jpg",   caption: "Living room & kitchen" },
     { src: "photos/sofa-living-room.jpg", caption: "Living room" },
+    { src: "photos/bathroom.jpg",         caption: "Bathroom" },
+    { src: "photos/upstairs-room-2.jpg",  caption: "Upstairs bedroom" },
+    { src: "photos/upstairs-room-1.jpg",  caption: "Upstairs bonus room" },
     { src: "photos/backyard.jpg",         caption: "Back yard" },
     { src: "photos/kitchen.jpg",          caption: "Kitchen" },
-    { src: "photos/primary-bed.jpg",      caption: "Primary bedroom" },
-    { src: "photos/bathroom.jpg",         caption: "Bathroom" },
   ],
 
   nearby: [
@@ -423,10 +416,10 @@ function fmtPrice(n){
   return new Intl.NumberFormat('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 }).format(n);
 }
 
-function setImgWithFallback(imgEl, src){
+function setImgWithFallback(imgEl, src, alt){
   if(!src){ return; }
   const test = new Image();
-  test.onload = () => { imgEl.src = src; };
+  test.onload = () => { imgEl.src = src; if(alt) imgEl.alt = alt; };
   test.onerror = () => { /* keep placeholder visible */ };
   test.src = src;
 }
@@ -439,7 +432,7 @@ function render(){
   document.getElementById('addrLine').textContent = LISTING.address;
   document.getElementById('cityLine').textContent = LISTING.cityStateZip;
   document.getElementById('priceVal').textContent = fmtPrice(LISTING.price);
-  setImgWithFallback(document.getElementById('heroImg'), LISTING.heroPhoto);
+  setImgWithFallback(document.getElementById('heroImg'), LISTING.heroPhoto, 'Front of the home');
 
   document.getElementById('statBeds').textContent = LISTING.beds;
   document.getElementById('statBaths').textContent = LISTING.baths;
@@ -464,13 +457,11 @@ function render(){
     frame.innerHTML = `
       <div class="photo-placeholder">
         <span class="icon">📷</span>
-        <small>${photo.caption}</small>
       </div>
-      <img alt="${photo.caption}">
-      <div class="photo-cap">${photo.caption}</div>
+      <img>
     `;
     const img = frame.querySelector('img');
-    setImgWithFallback(img, photo.src);
+    setImgWithFallback(img, photo.src, photo.caption);
     frame.addEventListener('click', () => openLightbox(i));
     grid.appendChild(frame);
   });
@@ -516,7 +507,6 @@ function render(){
 let lbIndex = 0;
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImg');
-const lbCap = document.getElementById('lbCap');
 
 function openLightbox(i){
   lbIndex = i;
@@ -527,8 +517,6 @@ function showLightboxPhoto(){
   const photo = LISTING.gallery[lbIndex];
   lbImg.src = photo.src;
   lbImg.alt = photo.caption;
-  lbCap.textContent = photo.caption;
-  lbImg.onerror = () => { lbCap.textContent = `${photo.caption} (add photos/${photo.src.split('/').pop()})`; };
 }
 document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
 document.getElementById('lbPrev').addEventListener('click', () => { lbIndex = (lbIndex - 1 + LISTING.gallery.length) % LISTING.gallery.length; showLightboxPhoto(); });
