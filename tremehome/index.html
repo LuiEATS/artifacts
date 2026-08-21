@@ -132,6 +132,16 @@
   .fact-card .val{ font-family:'Playfair Display',serif; font-weight:700; font-size:1.15rem; color:var(--purple); margin-top:4px; }
   .fact-card .lbl{ font-size:.78rem; color:#7a6f5c; text-transform:uppercase; letter-spacing:.06em; font-weight:700; }
 
+  .as-is-notice{
+    display:flex; align-items:flex-start; gap:14px;
+    max-width:640px; margin:28px auto 0;
+    background:#fff7ec; border:1.5px solid var(--orange); border-radius:var(--radius);
+    padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .as-is-notice .icon{ font-size:1.4rem; flex:none; }
+  .as-is-notice strong{ display:block; color:var(--orange-dark); font-size:1rem; margin-bottom:2px; }
+  .as-is-notice p{ margin:0; color:#54493a; font-size:.92rem; }
+
   /* gallery */
   .gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px; }
   .photo-frame{
@@ -279,6 +289,14 @@
       <div class="fact-card"><div class="icon">🌳</div><div class="val" id="fLot">0.15 acres</div><div class="lbl">Lot</div></div>
       <div class="fact-card"><div class="icon">🏛️</div><div class="val" id="fYear">Built 1890</div><div class="lbl">Vintage</div></div>
       <div class="fact-card"><div class="icon">🪶</div><div class="val" id="fStyle">Creole Cottage</div><div class="lbl">Style</div></div>
+    </div>
+
+    <div class="as-is-notice" id="asIsNotice">
+      <span class="icon">📋</span>
+      <div>
+        <strong>Sold As-Is</strong>
+        <p>This home is being sold as-is. No renovations or repairs are planned prior to sale.</p>
+      </div>
     </div>
   </div>
 </section>
